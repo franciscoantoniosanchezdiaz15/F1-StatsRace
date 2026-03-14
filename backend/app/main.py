@@ -1,11 +1,29 @@
 from flask import Flask
+from app.database.db import db
+from app.config import Config
+from app.models.usuario import Usuario
 
 app = Flask(__name__)
+app.config.from_object(Config)
+
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route("/")
 def inicio():
     return "Bienvenido a F1 StatsRace"
+
+
+@app.route("/health/db")
+def health_db():
+    try:
+        db.session.execute(db.text("SELECT 1"))
+        return {"message": "DB conectada"}
+    except Exception as e:
+        return {"error": str(e)}
 
 
 if __name__ == "__main__":
