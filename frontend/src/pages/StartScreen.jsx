@@ -1,6 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import bg from "../assets/f1-bg.png"
 
-function StartScreen({ onEmpezar }) {
+function StartScreen() {
+
+  const navigate = useNavigate();
+
   return (
     <div className="mt-20 bg-black/60 backdrop-blur-sm p-10 rounded-xl">
           <h1 className="text-5xl font-bold mb-4 text-[#FFEB00]">
@@ -12,8 +16,8 @@ function StartScreen({ onEmpezar }) {
           </p>
 
           <button
-            onClick={onEmpezar}
-            className="bg-[#A6051A] hover:bg-red-700 px-8 py-3 rounded-lg font-semibold transition"
+            onClick={() => navigate("/loading")}
+            className="bg-[#A6051A] hover:bg-red-700 px-8 py-3 rounded-lg font-semibold transition cursor-pointer"
           >
             Empezar
           </button>

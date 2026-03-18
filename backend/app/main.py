@@ -1,7 +1,15 @@
 from flask import Flask
 from app.database.db import db
 from app.config import Config
+from flask_cors import CORS
+
 from app.models.usuario import Usuario
+from app.models.escuderia import Escuderia
+from app.models.duelo import Duelo
+from app.models.duelo_escuderia import DueloEscuderia
+from app.models.participar import Participar
+
+from app.routes.auth_routes import auth_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -10,6 +18,14 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
+
+CORS(
+    app,
+    supports_credentials=True,
+    origins=["http://localhost:5173"]
+)
+
+app.register_blueprint(auth_bp)
 
 
 @app.route("/")
