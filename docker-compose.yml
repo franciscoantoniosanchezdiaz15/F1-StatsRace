@@ -1,7 +1,6 @@
 name: "f1-statsrace"
 
 services:
-
   db:
     image: mysql:8
     restart: always
@@ -14,13 +13,19 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   backend:
     build: "./backend"
     ports:
       - "5000:5000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./backend:/app
     environment:

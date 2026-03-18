@@ -1,5 +1,5 @@
-import Navbar from "../components/home/Navbar"
-import Hero from "../components/home/Hero"
+import Navbar from "../components/home/Navbar";
+import Hero from "../components/home/Hero";
 
 function Home() {
   return (
@@ -7,7 +7,7 @@ function Home() {
       <Navbar />
       <Hero />
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

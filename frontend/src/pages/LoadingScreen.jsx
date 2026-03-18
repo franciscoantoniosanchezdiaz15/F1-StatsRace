@@ -1,7 +1,20 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { BarLoader } from "react-spinners"
 import bg from "../assets/f1-bg.png"
 
 function LoadingScreen() {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate("/home");
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, [navigate]);
+
   return (
     <div className="mt-20 bg-black/70 backdrop-blur-sm p-10 rounded-xl w-full max-w-xl flex flex-col items-center">
           <h2 className="text-3xl font-bold text-[#FFEB00] mb-4">
