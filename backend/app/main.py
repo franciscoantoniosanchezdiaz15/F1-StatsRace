@@ -10,6 +10,7 @@ from app.models.duelo_escuderia import DueloEscuderia
 from app.models.participar import Participar
 
 from app.routes.auth_routes import auth_bp
+from app.routes.piloto_routes import piloto_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -26,6 +27,7 @@ CORS(
 )
 
 app.register_blueprint(auth_bp)
+app.register_blueprint(piloto_bp)
 
 
 @app.route("/")

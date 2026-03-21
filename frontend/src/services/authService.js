@@ -13,7 +13,13 @@ export async function registerUser(usuario, contraseña) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Error al registrar usuario");
+    let mensajeError = "Error al registrar usuario";
+
+    if (data && data.error) {
+      mensajeError = data.error;
+    }
+
+    throw new Error(mensajeError);
   }
 
   return data;
@@ -32,7 +38,13 @@ export async function loginUser(usuario, contraseña) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Error al iniciar sesión");
+    let mensajeError =  "Error al iniciar sesión";
+
+    if (data && data.error) {
+      mensajeError = data.error;
+    }
+
+    throw new Error(mensajeError);
   }
 
   return data;
@@ -47,7 +59,13 @@ export async function logoutUser() {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Error al cerrar sesión");
+    let mensajeError = "Error al cerrar sesión";
+
+    if (data && data.error) {
+      mensajeError = data.error;
+    }
+
+    throw new Error(mensajeError);
   }
 
   return data;

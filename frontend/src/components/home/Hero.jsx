@@ -24,11 +24,10 @@ function Hero() {
         </div>
       </div>
 
-      <div className="flex justify-center">
+      <div>
         <img
           src={bg}
           alt="F1 StatsRace"
-          className="w-full max-w-xl object-contain"
         />
       </div>
     </section>
