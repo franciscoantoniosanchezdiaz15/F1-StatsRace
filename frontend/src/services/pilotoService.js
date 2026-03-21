@@ -1,7 +1,7 @@
 const API_URL = "http://localhost:5000/api/pilotos";
 
-export async function fetchPilotos() {
-  const response = await fetch(API_URL, {
+export async function fetchPilotos(page = 1) {
+  const response = await fetch(`${API_URL}?page=${page}`, {
     method: "GET",
     credentials: "include",
   });
@@ -18,5 +18,5 @@ export async function fetchPilotos() {
     throw new Error(mensajeError);
   }
 
-  return data.data.pilotos;
+  return data.data;
 }

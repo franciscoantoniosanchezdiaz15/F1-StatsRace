@@ -6,7 +6,7 @@ function StartScreen() {
   const navigate = useNavigate();
 
   return (
-    <div className="mt-20 bg-black/60 backdrop-blur-sm p-10 rounded-xl">
+    <div className="mt-20 bg-black/60 backdrop-blur-sm p-10 rounded-xl flex flex-col items-center justify-between">
           <h1 className="text-5xl font-bold mb-4 text-[#FFEB00]">
             F1 StatsRace
           </h1>
