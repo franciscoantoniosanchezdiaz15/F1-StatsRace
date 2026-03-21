@@ -4,6 +4,7 @@ import LoadingScreen from "../pages/LoadingScreen";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Home from "../pages/Home";
+import PilotosPage from "../pages/PilotosPage";
 
 export default function AppRouter() {
   return (
@@ -14,6 +15,7 @@ export default function AppRouter() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="*" element={<Navigate to="/" />} />
+      <Route path="/pilotos" element={<PilotosPage />} />
     </Routes>
   );
 }

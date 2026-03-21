@@ -20,7 +20,7 @@ function Navbar() {
 
       <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
         <button onClick={() => navigate("/home")} className="hover:text-[#A6051A] transition cursor-pointer">Inicio</button>
-        <button className="hover:text-[#A6051A] transition cursor-pointer">Pilotos</button>
+        <button onClick={() => navigate("/pilotos")} className="hover:text-[#A6051A] transition cursor-pointer">Pilotos</button>
         <button className="hover:text-[#A6051A] transition cursor-pointer">Circuitos</button>
         <button className="hover:text-[#A6051A] transition cursor-pointer">Equipos</button>
         <button className="hover:text-[#A6051A] transition cursor-pointer">Duelo</button>
