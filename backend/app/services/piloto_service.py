@@ -55,6 +55,7 @@ def adaptar_pilotos(data):
                 "team_name": d.get("team_name"),
                 "country_code": d.get("country_code"),
                 "headshot_url": d.get("headshot_url"),
+                "team_colour": d.get("team_colour")
             }
 
     return list(pilotos.values())
