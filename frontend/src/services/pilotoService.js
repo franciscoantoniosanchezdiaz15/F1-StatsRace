@@ -20,3 +20,24 @@ export async function fetchPilotos(page = 1) {
 
   return data.data;
 }
+
+export async function fetchPilotoDetalle(driverNumber) {
+  const response = await fetch(`${API_URL}/${driverNumber}`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    let mensajeError = "Error obteniendo detalle del piloto";
+
+    if (data && data.error && data.error.message) {
+      mensajeError = data.error.message;
+    }
+
+    throw new Error(mensajeError);
+  }
+
+  return data.data.piloto;
+}

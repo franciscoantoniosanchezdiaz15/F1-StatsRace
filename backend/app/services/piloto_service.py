@@ -1,4 +1,5 @@
 from app.clients.f1_client import OpenF1Client
+from app.models.exceptions import PilotoNoEncontradoException
 
 client = OpenF1Client()
 
@@ -65,3 +66,13 @@ def listar_pilotos_client():
     data = extraer_pilotos_temporada()
     pilotos = adaptar_pilotos(data)
     return pilotos
+
+
+def obtener_piloto_por_numero(driver_number: int):
+    pilotos = listar_pilotos_client()
+
+    for piloto in pilotos:
+        if piloto["driver_number"] == driver_number:
+            return piloto
+
+    raise PilotoNoEncontradoException()
