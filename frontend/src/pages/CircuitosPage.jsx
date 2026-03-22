@@ -64,7 +64,7 @@ export default function CircuitosPage() {
                     hover:shadow-2xl hover:shadow-yellow-400/20
                     group cursor-pointer"
                 >
-                  <h2 className="text-2xl font-bold text-white mb-3">
+                  <h2 className="text-2xl font-bold text-white mb-2 transition-colors duration-300 group-hover:text-yellow-400">
                     {circuito.circuit_short_name}
                   </h2>
 
