@@ -1,6 +1,10 @@
 import bg from "../../assets/f1-bg.png"
+import { useNavigate } from "react-router-dom";
 
 function Hero() {
+
+  const navigate = useNavigate();
+ 
   return (
     <section className="max-w-7xl mx-auto px-10 py-16 grid grid-cols-1 md:grid-cols-2 items-center gap-12">
       <div className="text-left">
@@ -18,7 +22,9 @@ function Hero() {
             Comenzar ahora
           </button>
 
-          <button className="bg-[#FFEB00] text-black px-6 py-3 rounded-md font-bold hover:brightness-95 transition">
+          <button className="bg-[#FFEB00] text-black px-6 py-3 rounded-md font-bold transition cursor-pointer transition-all duration-300 hover:bg-yellow-300 hover:scale-105"
+            onClick={() => navigate("/pilotos")}
+          >
             Ver pilotos
           </button>
         </div>

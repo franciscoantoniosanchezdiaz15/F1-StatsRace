@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import { fetchPilotos } from "../services/pilotoService";
 import Daniel from "../assets/Daniel_Ricciardo.png";
-import { Link } from "react-router-dom";
-
 
 export default function PilotosPage() {
+  const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page  = parseInt(searchParams.get("page")) || 1;
+
   const [pilotos, setPilotos] = useState([]);
   const [paginacion, setPaginacion] = useState(null);
-  const [page, setPage] = useState(1);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -53,24 +55,24 @@ export default function PilotosPage() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12">
               {pilotos.map((piloto) => (
-                <Link
+                <button
                   key={piloto.driver_number}
                   className="bg-neutral-900 rounded-xl p-5 shadow-lg border border-neutral-700 animate-fade-in transition-all duration-300 ease-out
                     hover:scale-[1.04] hover:-translate-y-2
                     hover:border-yellow-400
                     hover:shadow-2xl hover:shadow-yellow-400/20
                     group cursor-pointer"
+                  onClick={() => navigate(`/pilotos/${piloto.driver_number}` , {state: {page}})}  
                 >
-                  
                   <img
                     src={piloto.headshot_url || Daniel}
                     alt={piloto.full_name}
-                    className="w-full h-35 object-contain mb-4 rounded-lg"
+                    className="w-full h-36 object-contain mb-4 rounded-lg"
                     style={{ backgroundColor: `#${piloto.team_colour}` }}
                   />
                   
 
-                  <h2 className="text-2xl font-bold text-white mb-2transition-colors duration-300 group-hover:text-yellow-400">
+                  <h2 className="text-2xl font-bold text-white mb-2 transition-colors duration-300 group-hover:text-yellow-400">
                     {piloto.full_name}
                   </h2>
 
@@ -86,7 +88,7 @@ export default function PilotosPage() {
                   <p className="text-gray-300">
                     <strong>País:</strong> {piloto.country_code}
                   </p> */}
-                </Link>
+                </button>
               ))}
             </div>
 
@@ -94,7 +96,7 @@ export default function PilotosPage() {
               <div className="flex items-center justify-center gap-4 mt-8">
                 {paginacion.anterior && (  
                   <button
-                    onClick={() => setPage(page - 1)}
+                    onClick={() => setSearchParams({page: page - 1})}
                     disabled={!paginacion.anterior}
                     className="px-4 py-2 rounded bg-gray-700 text-white disabled:opacity-50 transition-all duration-300 hover:bg-gray-600 hover:scale-105 cursor-pointer font-bold"
                   >
@@ -108,7 +110,7 @@ export default function PilotosPage() {
 
                 {paginacion.siguiente && (
                   <button
-                    onClick={() => setPage(page + 1)}
+                    onClick={() => setSearchParams({page: page + 1})}
                     disabled={!paginacion.siguiente}
                     className="px-4 py-2 rounded bg-yellow-400 text-black disabled:opacity-50 transition-all duration-300 hover:bg-yellow-300 hover:scale-105 cursor-pointer font-bold"
                   >

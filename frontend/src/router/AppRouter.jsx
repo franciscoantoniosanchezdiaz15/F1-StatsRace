@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Home from "../pages/Home";
 import PilotosPage from "../pages/PilotosPage";
+import PilotoDetalle from "../pages/PilotoDetalle";
 
 export default function AppRouter() {
   return (
@@ -16,6 +17,7 @@ export default function AppRouter() {
       <Route path="/register" element={<Register />} />
       <Route path="*" element={<Navigate to="/" />} />
       <Route path="/pilotos" element={<PilotosPage />} />
+      <Route path="/pilotos/:driver_number" element={<PilotoDetalle />} />
     </Routes>
   );
 }

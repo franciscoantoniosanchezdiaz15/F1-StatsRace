@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
-from app.services.piloto_service import listar_pilotos_client
+from app.services.piloto_service import listar_pilotos_client, obtener_piloto_por_numero
+from app.models.exceptions import PilotoNoEncontradoException
 
 piloto_bp = Blueprint("pilotos", __name__, url_prefix="/api/pilotos")
 
@@ -50,5 +51,37 @@ def lista_pilotos():
             "ok": False,
             "error": {
                 "message": "Error obteniendo pilotos"
+            }
+        }), 500
+
+
+@piloto_bp.route("/<int:driver_number>", methods=["GET"])
+def detalle_piloto(driver_number):
+    try:
+        piloto = obtener_piloto_por_numero(driver_number)
+
+        return jsonify({
+            "ok": True,
+            "data": {
+                "piloto": piloto,
+                "year": 2023
+            }
+        }), 200
+
+    except PilotoNoEncontradoException:
+        return jsonify({
+            "ok": False,
+            "error": {
+                "message": "Piloto no encontrado"
+            }
+        }), 404
+
+    except Exception as e:
+        print(f"Error en /api/pilotos/{driver_number}: {e}")
+
+        return jsonify({
+            "ok": False,
+            "error": {
+                "message": "Error obteniendo detalle del piloto"
             }
         }), 500

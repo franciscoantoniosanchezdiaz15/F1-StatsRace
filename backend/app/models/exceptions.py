@@ -36,3 +36,7 @@ class NombreNoValido(Exception):
 
 class NombreLongitudInvalida(Exception):
     pass
+
+
+class PilotoNoEncontradoException(Exception):
+    pass
