@@ -40,3 +40,7 @@ class NombreLongitudInvalida(Exception):
 
 class PilotoNoEncontradoException(Exception):
     pass
+
+
+class CircuitoNoEncontradoException(Exception):
+    pass

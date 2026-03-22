@@ -6,6 +6,8 @@ import Register from "../pages/Register";
 import Home from "../pages/Home";
 import PilotosPage from "../pages/PilotosPage";
 import PilotoDetalle from "../pages/PilotoDetalle";
+import CircuitosPage from "../pages/CircuitosPage";
+import CircuitoDetalle from "../pages/CircuitoDetalle";
 
 export default function AppRouter() {
   return (
@@ -18,6 +20,8 @@ export default function AppRouter() {
       <Route path="*" element={<Navigate to="/" />} />
       <Route path="/pilotos" element={<PilotosPage />} />
       <Route path="/pilotos/:driver_number" element={<PilotoDetalle />} />
+      <Route path="/circuitos" element={<CircuitosPage />} />
+      <Route path="/circuitos/:circuito_key" element={<CircuitoDetalle />} />
     </Routes>
   );
 }
