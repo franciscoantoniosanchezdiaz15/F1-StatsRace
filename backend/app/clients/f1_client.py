@@ -12,6 +12,7 @@ BASE_URL = "https://api.openf1.org/v1"
 class OpenF1Client:
     def __init__(self):
         self._cachePilotos = OrderedDict()
+        self._cacheEquipos = OrderedDict()
 
     def fetch_carreras(self, year):
         url = f"{BASE_URL}/sessions?year={year}&session_type=Race&session_name=Race"
@@ -57,6 +58,29 @@ class OpenF1Client:
         try:
             response = requests.get(url)
             data = response.json()
+            return data
+        except Exception as e:
+            print(f"Error desconocido: {str(e)}")
+            return None
+
+    def fetch_equipos(self, session_key):
+        if session_key in self._cacheEquipos:
+            data = self._cacheEquipos[session_key]
+
+            if time.time() - data["expiracion"] < TIEMPO_LIMITE:
+                return data["payload"]
+
+        url = f"{BASE_URL}/championship_teams?session_key={session_key}"
+
+        try:
+            response = requests.get(url)
+            data = response.json()
+
+            self._cacheEquipos[session_key] = {
+                "payload": data,
+                "expiracion": time.time()
+            }
+
             return data
         except Exception as e:
             print(f"Error desconocido: {str(e)}")

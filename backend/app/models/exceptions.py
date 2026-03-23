@@ -44,3 +44,7 @@ class PilotoNoEncontradoException(Exception):
 
 class CircuitoNoEncontradoException(Exception):
     pass
+
+
+class EquipoNoEncontradoException(Exception):
+    pass
