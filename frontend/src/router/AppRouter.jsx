@@ -8,6 +8,8 @@ import PilotosPage from "../pages/PilotosPage";
 import PilotoDetalle from "../pages/PilotoDetalle";
 import CircuitosPage from "../pages/CircuitosPage";
 import CircuitoDetalle from "../pages/CircuitoDetalle";
+import EquiposPage from "../pages/EquiposPage";
+import EquipoDetalle from "../pages/EquipoDetalle"
 
 export default function AppRouter() {
   return (
@@ -22,6 +24,8 @@ export default function AppRouter() {
       <Route path="/pilotos/:driver_number" element={<PilotoDetalle />} />
       <Route path="/circuitos" element={<CircuitosPage />} />
       <Route path="/circuitos/:circuito_key" element={<CircuitoDetalle />} />
+      <Route path="/equipos" element={<EquiposPage />} />
+      <Route path="/equipos/:team_name" element={<EquipoDetalle />} />
     </Routes>
   );
 }
