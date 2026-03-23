@@ -50,3 +50,14 @@ class OpenF1Client:
         except Exception as e:
             print(f"Error desconocido: {str(e)}")
             return None
+
+    def fetch_session_resultados(self, session_key):
+        url = f"{BASE_URL}/session_result?session_key={session_key}&position<=3"
+
+        try:
+            response = requests.get(url)
+            data = response.json()
+            return data
+        except Exception as e:
+            print(f"Error desconocido: {str(e)}")
+            return None

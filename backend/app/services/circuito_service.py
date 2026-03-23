@@ -55,3 +55,48 @@ def obtener_circuito_por_key(circuito_key: int):
             return circuito
 
     raise CircuitoNoEncontradoException()
+
+
+def obtener_podium_por_session_key(session_key: int):
+    resultados = client.fetch_session_resultados(session_key)
+
+    if not resultados:
+        return []
+
+    pilotos = client.fetch_pilotos(session_key)
+    mapa_pilotos = {}
+
+    for p in pilotos:
+        numero = p["driver_number"]
+        mapa_pilotos[numero] = p
+
+    podium = []
+
+    for item in resultados:
+
+        driver_number = item.get("driver_number")
+        piloto_info = mapa_pilotos.get(driver_number, {})
+
+        podium.append({
+            "position": item.get("position"),
+            "driver_number": item.get("driver_number"),
+            "points": item.get("points"),
+            "session_key": item.get("session_key"),
+
+            "full_name": piloto_info.get("full_name"),
+            "team_name": piloto_info.get("team_name")
+        })
+
+    return podium
+
+
+def obtener_circuito_detalle_con_podium(circuito_key: int):
+    circuito = obtener_circuito_por_key(circuito_key)
+    session_key = circuito.get("session_key")
+
+    podium = []
+    if session_key:
+        podium = obtener_podium_por_session_key(session_key)
+
+    circuito["podium"] = podium
+    return circuito

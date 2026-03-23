@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.services.circuito_service import listar_circuitos_client, obtener_circuito_por_key
+from app.services.circuito_service import listar_circuitos_client, obtener_circuito_por_key, obtener_circuito_detalle_con_podium
 from app.models.exceptions import CircuitoNoEncontradoException
 
 circuito_bp = Blueprint("circuitos", __name__, url_prefix="/api/circuitos")
@@ -56,7 +56,7 @@ def lista_circuitos():
 @circuito_bp.route("/<int:circuit_key>", methods=["GET"])
 def detalle_circuito(circuit_key):
     try:
-        circuito = obtener_circuito_por_key(circuit_key)
+        circuito = obtener_circuito_detalle_con_podium(circuit_key)
 
         return jsonify({
             "ok": True,

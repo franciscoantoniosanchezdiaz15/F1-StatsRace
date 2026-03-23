@@ -46,11 +46,20 @@ export default function CircuitoDetalle() {
     <div>
       <Navbar />
 
-      <section className="max-w-5xl mx-auto px-10 py-10">
+      <section className="max-w-5xl mx-auto px-10 py-10 pt-10">
 
-        {loading && <p className="text-white">Cargando detalle del circuito...</p>}
+        {loading && (
+          <div className="flex flex-col items-center justify-center h-64">
+            <div className="w-12 h-12 border-4 border-[#A6051A] border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-neutral-400 animate-pulse font-mono">Cargando circuito...</p>
+          </div>
+        )}
 
-        {error && <p className="text-red-400">Error: {error}</p>}
+        {error && (
+          <div className="bg-red-900/20 border border-red-500 p-6 rounded-xl text-center">
+            <p className="text-red-400 font-bold uppercase">Error: {error}</p>
+          </div>
+        )}
 
         {!loading && !error && circuito && (
           <article className="relative bg-neutral-900 rounded-tr-[50px] rounded-bl-[50px] border-l-4 border-t-4 border-neutral-700 shadow-2xl flex flex-col xl:flex-row items-stretch overflow-hidden animate-fade-in transition-all duration-300 ease-out">
@@ -155,9 +164,8 @@ export default function CircuitoDetalle() {
 
       <button
         onClick={() => navigate(`/circuitos?page=${page}`)}
-        className="mt-10 px-4 py-2 rounded bg-yellow-400 text-black disabled:opacity-50 transition-all duration-300 hover:bg-yellow-300 hover:scale-105 cursor-pointer font-bold"
-      >
-        ← Volver
+        className="mt-10 group flex items-center gap-3 px-8 py-3 rounded-full border border-neutral-700 text-neutral-400 transition-all hover:border-white hover:text-white cursor-pointer font-bold uppercase text-xs tracking-widest shadow-lg hover:shadow-white/5">
+        <span className="group-hover:-translate-x-1 transition-transform">←</span> Anterior
       </button>
 
     </div>
