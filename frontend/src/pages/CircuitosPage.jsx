@@ -38,14 +38,32 @@ export default function CircuitosPage() {
     <div>
       <Navbar />
 
-      <section className="max-w-7xl mx-auto px-10 py-6">
-        <h1 className="text-4xl font-bold text-[#FFEB00] mb-10">
-          Circuitos
-        </h1>
+      <section className="max-w-7xl mx-auto px-10 py-6 pt-10">
+        
+        <div className="flex items-end gap-4 mb-12 border-b border-neutral-800 pb-6">
+          <div className="h-12 w-2 bg-[#A6051A]"></div>
+          <div>
+            <h1 className="text-5xl font-black italic uppercase tracking-tighter">
+              <span className="text-[#FFEB00]">Circuitos</span>
+            </h1>
+            <p className="text-neutral-500 font-mono text-sm uppercase tracking-widest mt-1">
+              Temporada 2023
+            </p>
+          </div>
+        </div>
 
-        {loading && <p className="text-white">Cargando circuitos...</p>}
+        {loading && (
+          <div className="flex flex-col items-center justify-center h-64">
+            <div className="w-12 h-12 border-4 border-[#A6051A] border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-neutral-400 animate-pulse font-mono">Cargando circuitos...</p>
+          </div>
+        )}
 
-        {error && <p className="text-red-400">Error: {error}</p>}
+        {error && (
+          <div className="bg-red-900/20 border border-red-500 p-6 rounded-xl text-center">
+            <p className="text-red-400 font-bold uppercase">Error: {error}</p>
+          </div>
+        )}
 
         {!loading && !error && circuitos.length === 0 && (
           <p className="text-gray-300">No hay circuitos disponibles.</p>
@@ -58,61 +76,69 @@ export default function CircuitosPage() {
                 <article
                   key={circuito.circuit_key}
                   onClick={() => navigate(`/circuitos/${circuito.circuit_key}`, {state: { page }})}
-                  className="bg-neutral-900 rounded-xl p-5 shadow-lg border border-neutral-700 animate-fade-in transition-all duration-300 ease-out
-                    hover:scale-[1.04] hover:-translate-y-2
-                    hover:border-yellow-400
-                    hover:shadow-2xl hover:shadow-yellow-400/20
-                    group cursor-pointer"
+                  className="group relative bg-neutral-900/40 rounded-tl-[40px] rounded-br-[40px] border border-neutral-800 p-8 overflow-hidden transition-all duration-500 hover:border-[#00A3FF] hover:bg-neutral-900/80 cursor-pointer"
                 >
-                  <h2 className="text-2xl font-bold text-white mb-2 transition-colors duration-300 group-hover:text-yellow-400">
-                    {circuito.circuit_short_name}
-                  </h2>
+                  <div className="flex justify-between items-start mb-6">
+                    <div>
+                      <span className="text-[#00A3FF] font-mono text-[10px] tracking-widest uppercase">Location: {circuito.location}</span>
+                      <h2 className="text-3xl font-black uppercase italic tracking-tighter group-hover:text-[#FFEB00] transition-colors">
+                        {circuito.circuit_short_name}
+                      </h2>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-2xl font-black italic text-neutral-700 group-hover:text-[#00A3FF] transition-colors leading-none">
+                        {circuito.country_code}
+                      </p>
+                    </div>
+                  </div>
 
-                  <img
-                    src={getCircuito(circuito.circuit_key)} 
-                    alt={circuito.location}
-                    className="w-full h-[300px] object-contain drop-shadow-[0_20px_20px_rgba(0,0,0,0.5)]"
-                  />
+                  <div className="relative h-64 w-full flex items-center justify-center bg-black/40 rounded-2xl border border-white/5 shadow-inner">
+                    <img
+                      src={getCircuito(circuito.circuit_key)}
+                      alt={circuito.location}
+                      className="w-full h-full object-contain p-4 drop-shadow-[0_0_15px_rgba(0,163,255,0.4)] transform transition-transform duration-700 group-hover:scale-110"
+                    />
+                    
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00A3FF]/5 to-transparent translate-y-[-100%] group-hover:translate-y-[100%] transition-transform duration-[1.5s] ease-in-out"></div>
+                  </div>
 
-                  {/* <p className="text-gray-300 mb-2">
-                    <strong>País:</strong> {circuito.country_name}
-                  </p>
-
-                  <p className="text-gray-300 mb-2">
-                    <strong>Código país:</strong> {circuito.country_code}
-                  </p>
-
-                  <p className="text-gray-300 mb-2">
-                    <strong>Localización:</strong> {circuito.location}
-                  </p>
-
-                  <p className="text-gray-300">
-                    <strong>Fecha:</strong> {circuito.date_start || "—"}
-                  </p> */}
+                  <div className="mt-6 flex justify-between items-center">
+                    <div className="flex gap-4 font-mono text-[10px] text-neutral-500">
+                      <span className="flex items-center gap-1"><span className="w-1 h-1 bg-green-500"></span> DRS ACTIVO</span>
+                      <span className="flex items-center gap-1"><span className="w-1 h-1 bg-green-500"></span> LISTO</span>
+                    </div>
+                    <span className="text-[#FFEB00] font-bold text-sm tracking-tighter uppercase italic group-hover:translate-x-2 transition-transform">
+                      Ver Detalles →
+                    </span>
+                  </div>
+            
                 </article>
               ))}
             </div>
 
             {paginacion && (
-              <div className="flex items-center justify-center gap-4 mt-8">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mt-16 py-8 border-t border-neutral-900">
                 <button
                   onClick={() => setSearchParams({ page: page - 1 })}
                   disabled={!paginacion.anterior}
-                  className="px-4 py-2 rounded bg-gray-700 text-white disabled:opacity-50"
+                  className="group flex items-center gap-3 px-6 py-3 rounded-full border border-neutral-700 text-neutral-400 disabled:opacity-20 disabled:hover:scale-100 transition-all hover:border-white hover:text-white cursor-pointer font-bold uppercase text-xs tracking-widest"
                 >
-                  Anterior
+                  <span className="group-hover:-translate-x-1 transition-transform">←</span> Anterior
                 </button>
 
-                <span className="text-white">
-                  Página {paginacion.page} de {paginacion.total_pages}
-                </span>
+                <div className="flex items-center gap-2 font-mono text-sm">
+                  <span className="text-neutral-500 uppercase tracking-tighter">Sector</span>
+                  <span className="bg-neutral-800 px-3 py-1 rounded text-[#FFEB00] font-bold">{paginacion.page}</span>
+                  <span className="text-neutral-500 italic">of</span>
+                  <span className="text-neutral-300 font-bold">{paginacion.total_pages}</span>
+                </div>
 
                 <button
                   onClick={() => setSearchParams({ page: page + 1 })}
                   disabled={!paginacion.siguiente}
-                  className="px-4 py-2 rounded bg-yellow-400 text-black disabled:opacity-50"
+                  className="group flex items-center gap-3 px-6 py-3 rounded-full bg-[#FFEB00] text-black disabled:opacity-20 disabled:hover:scale-100 transition-all hover:bg-white cursor-pointer font-bold uppercase text-xs tracking-widest"
                 >
-                  Siguiente
+                  Siguiente <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </button>
               </div>
             )}
