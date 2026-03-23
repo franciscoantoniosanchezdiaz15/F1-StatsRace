@@ -9,7 +9,7 @@ equipo_bp = Blueprint("equipos", __name__, url_prefix="/api/equipos")
 def lista_equipos():
     try:
         page = request.args.get("page", default=1, type=int)
-        limit = 5
+        limit = 4
 
         if page < 1:
             page = 1

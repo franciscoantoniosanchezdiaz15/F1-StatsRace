@@ -7,5 +7,5 @@ export function getCircuito(circuit_key) {
 
   const key = `../assets/circuitos/${circuit_key}.jpeg`;
 
-  return circuitos[key]?.default || null;
+  return circuitos[key].default;
 }
