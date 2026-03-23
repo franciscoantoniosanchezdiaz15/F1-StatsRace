@@ -19,14 +19,6 @@ def extraer_pilotos_temporada():
     if not lista_carreras:
         return None
 
-    def clave_ordenacion(carrera):
-        if carrera.get("date_start"):
-            return carrera["date_start"]
-        else:
-            return ""
-
-    lista_carreras.sort(key=clave_ordenacion)
-
     ultima_carrera = lista_carreras[-1]
     session_key = ultima_carrera.get("session_key")
     if not session_key:
