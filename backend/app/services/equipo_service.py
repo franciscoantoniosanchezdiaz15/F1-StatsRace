@@ -51,8 +51,35 @@ def listar_equipos_client():
 def obtener_equipo_por_nombre(team_name: str):
     equipos = listar_equipos_client()
 
+    equipo_encontrado = None
+
     for equipo in equipos:
         if equipo["team_name"].lower() == team_name.lower():
-            return equipo
+            equipo_encontrado = equipo
+            break
 
-    raise EquipoNoEncontradoException()
+    if not equipo_encontrado:
+        raise EquipoNoEncontradoException()
+
+    session_key = equipo_encontrado.get("session_key")
+    if not session_key:
+        return None
+
+    pilotos = client.fetch_pilotos(session_key)
+    if not pilotos:
+        return None
+
+    pilotos_equipo = []
+
+    for piloto in pilotos:
+        if piloto.get("team_name") == equipo_encontrado["team_name"]:
+            pilotos_equipo.append({
+                "driver_number": piloto.get("driver_number"),
+                "full_name": piloto.get("full_name"),
+                "name_acronym": piloto.get("name_acronym"),
+                "headshot_url": piloto.get("headshot_url")
+            })
+
+    equipo_encontrado["pilotos"] = pilotos_equipo
+
+    return equipo_encontrado
