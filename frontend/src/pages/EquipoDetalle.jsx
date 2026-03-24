@@ -111,14 +111,14 @@ export default function EquipoDetalle() {
                       <div className="h-px flex-1 bg-neutral-700"></div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                       {equipo.pilotos.map((piloto) => (
                         <div
                           key={piloto.driver_number}
                           className="group/item mx-auto bg-neutral-950 p-1 rounded-xl flex items-center gap-3 border border-white/5 hover:border-[#00A3FF]/50 transition-all duration-300 hover:shadow-[0_10px_20px_rgba(0,0,0,0.4)] cursor-pointer"
                         >
                           
-                          <div className="w-20 h-20 bg-neutral-900 rounded-lg overflow-hidden flex-shrink-0">
+                          <div className="w-25 h-25 bg-neutral-900 rounded-lg overflow-hidden flex-shrink-0">
                             <img
                               src={piloto.headshot_url || Daniel}
                               alt={piloto.full_name}
