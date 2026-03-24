@@ -18,10 +18,10 @@ class Usuario(db.Model):
         "Duelo", back_populates="ganador_usuario", foreign_keys="Duelo.ganador_usuario_id")
 
     escuderias = relationship(
-        "Escuderia", back_populates="usuario", passive_deletes=True)
+        "Escuderia", back_populates="usuario", cascade="all, delete-orphan")
 
     duelos_escuderia = relationship(
-        "DueloEscuderia", back_populates="usuario", passive_deletes=True)
+        "DueloEscuderia", back_populates="usuario", cascade="all, delete-orphan")
 
     def __init__(self, nombre, contraseña):
         self.nombre = nombre

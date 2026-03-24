@@ -9,16 +9,13 @@ class Escuderia(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     nombre = Column(String(100), nullable=False)
 
-    presupuesto_max = Column(Integer, nullable=False)
+    presupuesto_max = Column(Integer, nullable=False, default=0)
     coste_total = Column(Integer, nullable=False)
-
-    piloto1_numero = Column(Integer, nullable=False)
-    piloto1_nombre = Column(String(100), nullable=False)
-
-    piloto2_numero = Column(Integer, nullable=False)
-    piloto2_nombre = Column(String(100), nullable=False)
 
     usuario_id = Column(Integer, ForeignKey(
         "usuarios.id", ondelete="CASCADE"), nullable=False)
 
     usuario = relationship("Usuario", back_populates="escuderias")
+
+    pilotos = relationship(
+        "PilotoEscuderia", back_populates="escuderia", cascade="all, delete-orphan")
