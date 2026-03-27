@@ -48,3 +48,31 @@ class CircuitoNoEncontradoException(Exception):
 
 class EquipoNoEncontradoException(Exception):
     pass
+
+
+class EscuderiaNoEncontradaException(Exception):
+    pass
+
+
+class PresupuestoInsuficienteException(Exception):
+    pass
+
+
+class PilotosDuplicadosException(Exception):
+    pass
+
+
+class NumeroPilotosInvalidoException(Exception):
+    pass
+
+
+class EscuderiaNoAutorizadaException(Exception):
+    pass
+
+
+class NombreEscuderiaDuplicadoException(Exception):
+    pass
+
+
+class NombreEscuderiaNoValidoException(Exception):
+    pass
