@@ -13,6 +13,8 @@ from app.routes.auth_routes import auth_bp
 from app.routes.piloto_routes import piloto_bp
 from app.routes.circuito_routes import circuito_bp
 from app.routes.equipo_routes import equipo_bp
+from app.routes.escuderia_routes import escuderia_bp
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -32,6 +34,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(piloto_bp)
 app.register_blueprint(circuito_bp)
 app.register_blueprint(equipo_bp)
+app.register_blueprint(escuderia_bp)
 
 
 @app.route("/")

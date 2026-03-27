@@ -1,16 +1,9 @@
 from flask import Blueprint, jsonify, request, session
 from app.services.usuario_service import registrar_usuario, autenticar_usuario
 from app.models.exceptions import (
-    UsuarioExistenteException,
-    UsuarioNoCreadoException,
-    UsuarioNotFoundException,
-    ContraseñaIncorrectaException,
-    ContraseñaCorta,
-    ContraseñaNoValida,
-    NoContraseña,
-    NombreNoValido,
-    NombreLongitudInvalida,
-    NoNombre
+    UsuarioExistenteException, UsuarioNoCreadoException, UsuarioNotFoundException,
+    ContraseñaIncorrectaException, ContraseñaCorta, ContraseñaNoValida,
+    NoContraseña, NombreNoValido, NombreLongitudInvalida, NoNombre
 )
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")

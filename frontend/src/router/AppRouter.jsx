@@ -10,6 +10,10 @@ import CircuitosPage from "../pages/CircuitosPage";
 import CircuitoDetalle from "../pages/CircuitoDetalle";
 import EquiposPage from "../pages/EquiposPage";
 import EquipoDetalle from "../pages/EquipoDetalle"
+import DuelosPage from "../pages/DuelosPage";
+import EscuderiasPage from "../pages/EscuderiaPage";
+import CrearEscuderiaPage from "../pages/CrearEscuderiaPage";
+import EscuderiaDetallePage from "../pages/EscuderiaDetallePage";
 
 export default function AppRouter() {
   return (
@@ -26,6 +30,10 @@ export default function AppRouter() {
       <Route path="/circuitos/:circuito_key" element={<CircuitoDetalle />} />
       <Route path="/equipos" element={<EquiposPage />} />
       <Route path="/equipos/:team_name" element={<EquipoDetalle />} />
+      <Route path="/duelos" element={<DuelosPage />} />
+      <Route path="/escuderias" element={<EscuderiasPage />} />
+      <Route path="/escuderias/crear" element={<CrearEscuderiaPage />} />
+      <Route path="/escuderias/:escuderia_id" element={<EscuderiaDetallePage />} />
     </Routes>
   );
 }

@@ -28,7 +28,7 @@ function Navbar() {
           <button onClick={() => navigate("/pilotos")} className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-red-700 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 cursor-pointer">Pilotos</button>
           <button onClick={() => navigate("/circuitos")} className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-red-700 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 cursor-pointer">Circuitos</button>
           <button onClick={() => navigate("/equipos")} className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-red-700 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 cursor-pointer">Equipos</button>
-          <button className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-red-700 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 cursor-pointer">Duelo</button>
+          <button onClick={() => navigate("/duelos")} className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-red-700 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 cursor-pointer">Duelo</button>
         </nav>
 
         
