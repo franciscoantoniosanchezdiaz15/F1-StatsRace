@@ -65,31 +65,49 @@ export default function DueloEscuderiasHistorialPage() {
 
         {!loading && !error && historial.length > 0 && (
           <div className="grid grid-cols-1 gap-6">
-            {historial.map((duelo) => (
-              <article
-                key={duelo.id}
-                className="bg-neutral-900 rounded-xl p-6 border border-neutral-700 shadow-lg"
-              >
-                <h2 className="text-2xl font-bold text-white mb-3">
-                  {duelo.escuderia_usuario_nombre} vs {duelo.escuderia_rival_nombre}
-                </h2>
+            {historial.map((duelo) => {
+              const esCarrera = duelo.modo === "carrera";
 
-                <div className="space-y-2 text-gray-300 mb-4">
-                  <p><strong>Modo:</strong> {duelo.modo}</p>
-                  <p><strong>Tipo rival:</strong> {duelo.tipo_rival}</p>
-                  <p><strong>Circuito:</strong> {duelo.circuito}</p>
-                  <p><strong>Ganador:</strong> {duelo.ganador}</p>
-                  <p><strong>Diferencia:</strong> {duelo.diferencia}</p>
-                </div>
-
-                <button
-                  onClick={() => handleEliminar(duelo.id)}
-                  className="px-4 py-2 bg-red-700 text-white rounded hover:bg-red-600 transition"
+              return (
+                <article
+                  key={duelo.id}
+                  className="bg-neutral-900 rounded-xl p-6 border border-neutral-700 shadow-lg"
                 >
-                  Eliminar
-                </button>
-              </article>
-            ))}
+                  <h2 className="text-2xl font-bold text-white mb-3">
+                    {duelo.escuderia_usuario_nombre} vs {duelo.escuderia_rival_nombre}
+                  </h2>
+
+                  <div className="space-y-2 text-gray-300 mb-4">
+                    <p><strong>Modo:</strong> {duelo.modo}</p>
+                    <p><strong>Tipo rival:</strong> {duelo.tipo_rival}</p>
+                    <p><strong>Circuito:</strong> {duelo.circuito}</p>
+                    <p><strong>Ganador:</strong> {duelo.ganador}</p>
+
+                    {esCarrera ? (
+                      <>
+                        <p><strong>Puntos usuario:</strong> {duelo.tiempo_usuario}</p>
+                        <p><strong>Puntos rival:</strong> {duelo.tiempo_rival}</p>
+                        <p><strong>Diferencia de puntos:</strong> {duelo.diferencia}</p>
+                      </>
+                    ) : (
+                      <>
+                        <p><strong>Tiempo usuario:</strong> {duelo.tiempo_usuario}</p>
+                        <p><strong>Tiempo rival:</strong> {duelo.tiempo_rival}</p>
+                        <p><strong>Diferencia:</strong> {duelo.diferencia}</p>
+                      </>
+                    )}
+                  </div>
+
+
+                  <button
+                    onClick={() => handleEliminar(duelo.id)}
+                    className="px-4 py-2 bg-red-700 text-white rounded hover:bg-red-600 transition"
+                  >
+                    Eliminar
+                  </button>
+                </article>
+              );
+            })}
           </div>
         )}
       </section>

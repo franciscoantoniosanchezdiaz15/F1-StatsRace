@@ -74,9 +74,9 @@ export default function CrearEscuderiaPage() {
       navigate("/escuderias");
     } catch (err) {
       setError(err.message);
-       window.scrollTo({
+      window.scrollTo({
         top: 0
-        });
+      });
     } finally {
       setSaving(false);
     }

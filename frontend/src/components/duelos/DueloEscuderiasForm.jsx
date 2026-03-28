@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { fetchDatosDueloEscuderias } from "../../services/dueloEscuderiasService";
+import { useNavigate } from "react-router-dom";
 
 export default function DueloEscuderiasForm({ modo, onSubmit }) {
+  const navigate = useNavigate();
+
   const [escuderias, setEscuderias] = useState([]);
   const [circuitos, setCircuitos] = useState([]);
 
@@ -72,6 +75,9 @@ export default function DueloEscuderiasForm({ modo, onSubmit }) {
       await onSubmit(payload);
     } catch (err) {
       setError(err.message);
+      window.scrollTo({
+        top: 0
+      });
     } finally {
       setSubmitting(false);
     }
@@ -90,7 +96,25 @@ export default function DueloEscuderiasForm({ modo, onSubmit }) {
       {loading && <p className="text-white">Cargando datos...</p>}
       {error && <p className="text-red-400 mb-4">Error: {error}</p>}
 
-      {!loading && (
+      {!loading && escuderias.length === 0 && (
+        <div className="bg-neutral-900 rounded-2xl p-8 border border-neutral-700">
+          <p className="text-white text-lg mb-4">
+            No tienes ninguna escudería creada.
+          </p>
+          <p className="text-gray-400 mb-6">
+            Para simular un duelo primero debes crear tu escudería.
+          </p>
+
+          <button
+            onClick={() => navigate("/escuderias/crear")}
+            className="px-6 py-3 bg-[#FFEB00] text-black font-bold rounded hover:brightness-95 transition"
+          >
+            Crear escudería
+          </button>
+        </div>
+      )}
+
+      {!loading && escuderias.length > 0 && (
         <form
           onSubmit={handleSubmit}
           className="bg-neutral-900 rounded-2xl p-8 border border-neutral-700 space-y-6"
