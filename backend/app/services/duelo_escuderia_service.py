@@ -33,16 +33,19 @@ def crear_duelo_escuderia_resumen(duelo: DueloEscuderia):
     }
 
 
-def crear_escuderia_resumen(escuderia):
+def crear_piloto_resumen_base(piloto):
+    return {
+        "driver_number": piloto.driver_number,
+        "full_name": piloto.full_name,
+        "team_name": piloto.team_name,
+        "precio": piloto.precio,
+    }
 
+
+def crear_escuderia_resumen(escuderia):
     lista_pilotos = []
     for piloto in escuderia.pilotos:
-        datos_piloto = {
-            "driver_number": piloto.driver_number,
-            "full_name": piloto.full_name,
-            "team_name": piloto.team_name,
-            "precio": piloto.precio
-        }
+        datos_piloto = crear_piloto_resumen_base(piloto)
         lista_pilotos.append(datos_piloto)
 
     return {
@@ -65,10 +68,10 @@ def calcular_quimica_escuderia(escuderia):
 
     diferencia = abs(precio_piloto_1 - precio_piloto_2)
 
-    puntos_base_bonus = 10 - diferencia
+    puntos_base_bonus = 20 - diferencia
     puntos_ajustados = max(0, puntos_base_bonus)
 
-    bonus_equilibrado = puntos_ajustados * 0.5
+    bonus_equilibrado = puntos_ajustados * 0.3
 
     return bonus_equilibrado
 
@@ -175,7 +178,7 @@ def es_resultado_valido_carrera(resultado: dict):
     try:
         float(puntos)
         return True
-    except:
+    except (Exception):
         return False
 
 
@@ -190,6 +193,66 @@ def extraer_puntos_validos(resultados: list[dict]):
                 continue
 
     return puntos
+
+
+def obtener_lista_resultados_por_driver(resultados: list[dict]):
+    lista = {}
+
+    for resultado in resultados:
+        driver_number = resultado.get("driver_number")
+        if driver_number is not None:
+            lista[driver_number] = resultado
+
+    return lista
+
+
+def obtener_detalle_carrera_escuderia(session_key: int, escuderia):
+    driver_numbers = obtener_driver_numbers_escuderia(escuderia)
+    resultados = obtener_resultados_pilotos(session_key, driver_numbers)
+    lista_resultados = obtener_lista_resultados_por_driver(resultados)
+
+    pilotos_detalle = []
+
+    for piloto in escuderia.pilotos:
+        resultado = lista_resultados.get(piloto.driver_number)
+
+        puntos = 0.0
+        valido = False
+
+        if resultado and es_resultado_valido_carrera(resultado):
+            try:
+                puntos = float(resultado.get("points"))
+                valido = True
+            except (Exception):
+                puntos = 0.0
+
+        datos_piloto = crear_piloto_resumen_base(piloto)
+        datos_piloto["valor"] = puntos
+        datos_piloto["valido"] = valido
+
+        if resultado:
+            datos_piloto["position"] = resultado.get("position")
+        else:
+            datos_piloto["position"] = None
+
+        pilotos_detalle.append(datos_piloto)
+
+    bonus_quimica = float(calcular_quimica_escuderia(escuderia))
+
+    total_sin_bonus = 0
+    for p in pilotos_detalle:
+        total_sin_bonus += p["valor"]
+
+    valor_final = total_sin_bonus + bonus_quimica
+
+    return {
+        "id": escuderia.id,
+        "nombre": escuderia.nombre,
+        "coste_total": escuderia.coste_total,
+        "bonus_quimica": round(bonus_quimica, 3),
+        "valor_final": round(valor_final, 3),
+        "pilotos": pilotos_detalle,
+    }
 
 
 def obtener_vueltas_piloto(session_key: int, driver_number: int):
@@ -235,65 +298,91 @@ def obtener_mejor_vuelta_piloto(session_key: int, driver_number: int):
     return min(vueltas_validas)
 
 
-def obtener_mejor_vuelta_escuderia(session_key: int, escuderia):
-    driver_numbers = obtener_driver_numbers_escuderia(escuderia)
+def obtener_mejor_vuelta_piloto_con_detalle(session_key: int, piloto):
+    mejor_vuelta = obtener_mejor_vuelta_piloto(
+        session_key, piloto.driver_number)
 
-    mejores_vueltas = []
+    datos_piloto = crear_piloto_resumen_base(piloto)
+    if mejor_vuelta is not None:
+        datos_piloto["valor"] = round(mejor_vuelta, 3)
+        datos_piloto["valido"] = True
+    else:
+        datos_piloto["valor"] = None
+        datos_piloto["valido"] = False
 
-    for driver_number in driver_numbers:
-        mejor_vuelta = obtener_mejor_vuelta_piloto(session_key, driver_number)
-        if mejor_vuelta is not None:
-            mejores_vueltas.append(mejor_vuelta)
+    return datos_piloto
 
-    if not mejores_vueltas:
-        return None
 
-    mejor_vuelta = min(mejores_vueltas)
+def obtener_detalle_mejor_tiempo_escuderia(session_key: int, escuderia):
+    pilotos_detalle = []
 
-    return mejor_vuelta
+    for piloto in escuderia.pilotos:
+        pilotos_detalle.append(
+            obtener_mejor_vuelta_piloto_con_detalle(session_key, piloto)
+        )
+
+    vueltas_validas = []
+    for p in pilotos_detalle:
+        if p["valor"] is not None:
+            vueltas_validas.append(p["valor"])
+        bonus_quimica = float(calcular_quimica_escuderia(escuderia))
+
+    if vueltas_validas:
+        mejor_base = min(vueltas_validas)
+        valor_final = aplicar_quimica_a_tiempo(mejor_base, escuderia)
+    else:
+        mejor_base = None
+        valor_final = None
+
+    resultado_final = {
+        "id": escuderia.id,
+        "nombre": escuderia.nombre,
+        "coste_total": escuderia.coste_total,
+        "bonus_quimica": round(bonus_quimica, 3),
+        "valor_final": None,
+        "pilotos": pilotos_detalle,
+    }
+
+    if valor_final is not None:
+        resultado_final["valor_final"] = round(valor_final, 3)
+
+    return resultado_final
 
 
 def calcular_resultado_duelo(escuderia_usuario, escuderia_rival, circuito_key: int, modo: str):
     session_key = obtener_session_key_por_circuito(circuito_key)
 
     if modo == "carrera":
-        driver_numbers_usuario = obtener_driver_numbers_escuderia(
-            escuderia_usuario)
-        driver_numbers_rival = obtener_driver_numbers_escuderia(
-            escuderia_rival)
-
-        resultados_usuario = obtener_resultados_pilotos(
-            session_key, driver_numbers_usuario)
-        resultados_rival = obtener_resultados_pilotos(
-            session_key, driver_numbers_rival)
-
-        puntos_usuario = extraer_puntos_validos(resultados_usuario)
-        puntos_rival = extraer_puntos_validos(resultados_rival)
-
-        total_usuario = sum(puntos_usuario)
-        total_rival = sum(puntos_rival)
-
-        bonus_usuario = calcular_quimica_escuderia(escuderia_usuario)
-        bonus_rival = calcular_quimica_escuderia(escuderia_rival)
-
-        total_usuario = total_usuario + bonus_usuario
-        total_rival = total_rival + bonus_rival
-
-        return total_usuario, total_rival
-
-    if modo == "mejor-tiempo":
-        mejor_usuario = obtener_mejor_vuelta_escuderia(
+        detalle_usuario = obtener_detalle_carrera_escuderia(
             session_key, escuderia_usuario)
-        mejor_rival = obtener_mejor_vuelta_escuderia(
+        detalle_rival = obtener_detalle_carrera_escuderia(
             session_key, escuderia_rival)
 
-        tiempo_usuario = aplicar_quimica_a_tiempo(
-            round(mejor_usuario, 3), escuderia_usuario)
+        return {
+            "valor_usuario": detalle_usuario["valor_final"],
+            "valor_rival": detalle_rival["valor_final"],
+            "detalle_usuario": detalle_usuario,
+            "detalle_rival": detalle_rival,
+        }
 
-        tiempo_rival = aplicar_quimica_a_tiempo(
-            round(mejor_rival, 3), escuderia_rival)
+    if modo == "mejor-tiempo":
+        detalle_usuario = obtener_detalle_mejor_tiempo_escuderia(
+            session_key, escuderia_usuario)
+        detalle_rival = obtener_detalle_mejor_tiempo_escuderia(
+            session_key, escuderia_rival)
 
-        return tiempo_usuario, tiempo_rival
+        valor_usuario = detalle_usuario["valor_final"]
+        valor_rival = detalle_rival["valor_final"]
+
+        if valor_usuario is None and valor_rival is None:
+            raise DueloInvalidoException()
+
+        return {
+            "valor_usuario": valor_usuario,
+            "valor_rival": valor_rival,
+            "detalle_usuario": detalle_usuario,
+            "detalle_rival": detalle_rival,
+        }
 
     raise DueloInvalidoException()
 
@@ -310,13 +399,17 @@ def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_c
         modo_rival, escuderia_id_1, escuderia_id_2)
     circuito = seleccionar_circuito(modo_circuito, circuito_key)
 
-    # valor pq puede ser vuelta rapida o carrera
-    valor_usuario, valor_rival = calcular_resultado_duelo(
+    resultado_duelo = calcular_resultado_duelo(
         escuderia_usuario,
         escuderia_rival,
         circuito["circuit_key"],
         modo,
     )
+
+    valor_usuario = resultado_duelo["valor_usuario"]
+    valor_rival = resultado_duelo["valor_rival"]
+    detalle_usuario = resultado_duelo["detalle_usuario"]
+    detalle_rival = resultado_duelo["detalle_rival"]
 
     if modo == "carrera":
         # carrera -> puntos (mas gana)
@@ -331,7 +424,7 @@ def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_c
         else:
             ganador = escuderia_rival.nombre
 
-    diferencia = abs(valor_usuario - valor_rival)
+    diferencia = round(abs(valor_usuario - valor_rival))
 
     duelo = DueloEscuderia(
         tipo_rival=modo_rival,

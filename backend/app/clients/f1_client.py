@@ -96,7 +96,7 @@ class OpenF1Client:
             params.append(texto)
 
         query = "&".join(params)
-        cache_key = session_key + ":" + query
+        cache_key = f"{session_key}:{query}"
 
         if cache_key in self._cacheSessionResults:
             data = self._cacheSessionResults[cache_key]
