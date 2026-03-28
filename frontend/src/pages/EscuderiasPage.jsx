@@ -53,6 +53,14 @@ export default function EscuderiasPage() {
           >
             Crear escudería
           </button>
+
+          <button
+            onClick={() => navigate("/duelos/escuderias")}
+            className="px-5 py-2 bg-[#FFEB00] text-black font-bold rounded hover:brightness-95 transition"
+          >
+            Competir
+          </button>
+
         </div>
 
         {loading && <p className="text-white">Cargando escuderías...</p>}

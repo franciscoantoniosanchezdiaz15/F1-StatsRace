@@ -76,3 +76,15 @@ class NombreEscuderiaDuplicadoException(Exception):
 
 class NombreEscuderiaNoValidoException(Exception):
     pass
+
+
+class DueloInvalidoException(Exception):
+    pass
+
+
+class RivalNoDisponibleException(Exception):
+    pass
+
+
+class DueloEscuderiaNoEncontradoException(Exception):
+    pass
