@@ -18,6 +18,8 @@ import DueloPilotosMenuPage from "../pages/DueloPilotosMenuPage";
 import DueloEscuderiasMenuPage from "../pages/DueloEscuderiasMenuPage";
 import DueloEscuderiasCarreraPage from "../pages/DueloEscuderiasCarreraPage";
 import DueloEscuderiasMejorTiempoPage from "../pages/DueloEscuderiasMejorTiempoPage";
+import DueloEscuderiasResultadoPage from "../pages/DueloEscuderiasResultadoPage";
+import DueloEscuderiasHistorialPage from "../pages/DueloEscuderiasHistorialPage";
 
 
 
@@ -44,6 +46,8 @@ export default function AppRouter() {
       <Route path="/duelos/escuderias" element={<DueloEscuderiasMenuPage />} />
       <Route path="/duelos/escuderias/carrera" element={<DueloEscuderiasCarreraPage />} />
       <Route path="/duelos/escuderias/mejor-tiempo" element={<DueloEscuderiasMejorTiempoPage />} />
+      <Route path="/duelos/escuderias/resultado" element={<DueloEscuderiasResultadoPage />} />
+      <Route path="/duelos/escuderias/historial" element={<DueloEscuderiasHistorialPage />} />
     </Routes>
   );
 }
