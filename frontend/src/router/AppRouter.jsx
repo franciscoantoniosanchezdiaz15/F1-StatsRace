@@ -11,9 +11,15 @@ import CircuitoDetalle from "../pages/CircuitoDetalle";
 import EquiposPage from "../pages/EquiposPage";
 import EquipoDetalle from "../pages/EquipoDetalle"
 import DuelosPage from "../pages/DuelosPage";
-import EscuderiasPage from "../pages/EscuderiaPage";
+import EscuderiasPage from "../pages/EscuderiasPage";
 import CrearEscuderiaPage from "../pages/CrearEscuderiaPage";
 import EscuderiaDetallePage from "../pages/EscuderiaDetallePage";
+import DueloPilotosMenuPage from "../pages/DueloPilotosMenuPage";
+import DueloEscuderiasMenuPage from "../pages/DueloEscuderiasMenuPage";
+import DueloEscuderiasCarreraPage from "../pages/DueloEscuderiasCarreraPage";
+import DueloEscuderiasMejorTiempoPage from "../pages/DueloEscuderiasMejorTiempoPage";
+
+
 
 export default function AppRouter() {
   return (
@@ -34,6 +40,10 @@ export default function AppRouter() {
       <Route path="/escuderias" element={<EscuderiasPage />} />
       <Route path="/escuderias/crear" element={<CrearEscuderiaPage />} />
       <Route path="/escuderias/:escuderia_id" element={<EscuderiaDetallePage />} />
+      <Route path="/duelos/pilotos" element={<DueloPilotosMenuPage />} />
+      <Route path="/duelos/escuderias" element={<DueloEscuderiasMenuPage />} />
+      <Route path="/duelos/escuderias/carrera" element={<DueloEscuderiasCarreraPage />} />
+      <Route path="/duelos/escuderias/mejor-tiempo" element={<DueloEscuderiasMejorTiempoPage />} />
     </Routes>
   );
 }
