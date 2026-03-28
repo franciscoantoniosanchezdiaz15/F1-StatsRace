@@ -1,6 +1,77 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 
+function renderEstadoCarrera(piloto){
+  if(!piloto.valido){
+    return "NF";
+  }
+  return `P${piloto.position}`;
+}
+
+
+function EscuderiaDetalleCard({ escuderia, esCarrera }) {
+  return (
+    <div className="bg-neutral-800 rounded-xl p-5">
+      <h2 className="text-2xl font-bold text-white mb-3">
+        {escuderia.nombre}
+      </h2>
+
+      <div className="space-y-2 text-gray-300 mb-5">
+        <p>
+          <strong>Coste total:</strong> {escuderia.coste_total}
+        </p>
+        <p>
+          <strong>
+            {esCarrera ? "Puntos extras por quimica" : "Tiempo reducido por quimica"}
+          </strong>{" "} 
+          {escuderia.bonus_quimica}
+        </p>
+        <p>
+          <strong>
+            {esCarrera ? "Puntuación final:" : "Tiempo final:"}
+          </strong>{" "}
+          {escuderia.valor_final}
+        </p>
+      </div>
+
+      <h3 className="text-lg font-bold text-white mb-3">Pilotos</h3>
+
+      <div className="space-y-3">
+        {escuderia.pilotos.map((piloto) => (
+          <div
+            key={piloto.driver_number}
+            className="bg-neutral-900 rounded-lg p-4 border border-neutral-700"
+          >
+            <p className="text-white font-bold">{piloto.full_name}</p>
+            <p className="text-gray-400">{piloto.team_name}</p>
+            <p className="text-gray-400">Precio: {piloto.precio}</p>
+
+            {esCarrera ? (
+              <>
+                <p className="text-gray-300">
+                  Puesto: {renderEstadoCarrera(piloto)}
+                </p>
+                <p className="text-gray-300">
+                  Puntos: {piloto.valor}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-300">
+                  Mejor vuelta: {piloto.valor ?? "Sin tiempo"}
+                </p>
+                <p className="text-gray-300">
+                  Válido: {piloto.valido ? "Sí" : "No"}
+                </p>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function DueloEscuderiasResultadoPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -65,33 +136,8 @@ export default function DueloEscuderiasResultadoPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-neutral-800 rounded-xl p-5">
-              <h2 className="text-2xl font-bold text-white mb-4">
-                {resultado.escuderia_usuario.nombre}
-              </h2>
-
-              <ul className="space-y-2 text-gray-300">
-                {resultado.escuderia_usuario.pilotos.map((piloto) => (
-                  <li key={piloto.driver_number}>
-                    {piloto.full_name} - {piloto.team_name} ({piloto.precio})
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="bg-neutral-800 rounded-xl p-5">
-              <h2 className="text-2xl font-bold text-white mb-4">
-                {resultado.escuderia_rival.nombre}
-              </h2>
-
-              <ul className="space-y-2 text-gray-300">
-                {resultado.escuderia_rival.pilotos.map((piloto) => (
-                  <li key={piloto.driver_number}>
-                    {piloto.full_name} - {piloto.team_name} ({piloto.precio})
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <EscuderiaDetalleCard escuderia={resultado.escuderia_usuario} esCarrera={esCarrera} />
+            <EscuderiaDetalleCard escuderia={resultado.escuderia_rival} esCarrera={esCarrera} />
           </div>
 
           <button

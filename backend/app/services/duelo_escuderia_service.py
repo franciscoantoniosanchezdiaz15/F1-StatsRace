@@ -68,7 +68,7 @@ def calcular_quimica_escuderia(escuderia):
 
     diferencia = abs(precio_piloto_1 - precio_piloto_2)
 
-    puntos_base_bonus = 20 - diferencia
+    puntos_base_bonus = 30 - diferencia
     puntos_ajustados = max(0, puntos_base_bonus)
 
     bonus_equilibrado = puntos_ajustados * 0.3
@@ -328,7 +328,7 @@ def obtener_detalle_mejor_tiempo_escuderia(session_key: int, escuderia):
         bonus_quimica = float(calcular_quimica_escuderia(escuderia))
 
     if vueltas_validas:
-        mejor_base = min(vueltas_validas)
+        mejor_base = sum(vueltas_validas)
         valor_final = aplicar_quimica_a_tiempo(mejor_base, escuderia)
     else:
         mejor_base = None
@@ -424,7 +424,7 @@ def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_c
         else:
             ganador = escuderia_rival.nombre
 
-    diferencia = round(abs(valor_usuario - valor_rival))
+    diferencia = round(abs(valor_usuario - valor_rival), 2)
 
     duelo = DueloEscuderia(
         tipo_rival=modo_rival,
@@ -450,8 +450,8 @@ def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_c
         "tipo_rival": modo_rival,
         "modo_circuito": modo_circuito,
         "circuito": circuito,
-        "escuderia_usuario": crear_escuderia_resumen(escuderia_usuario),
-        "escuderia_rival": crear_escuderia_resumen(escuderia_rival),
+        "escuderia_usuario": detalle_usuario,
+        "escuderia_rival": detalle_rival,
         "resultado": {
             "ganador": ganador,
             "tiempo_usuario": valor_usuario,

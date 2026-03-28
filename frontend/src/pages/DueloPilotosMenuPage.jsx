@@ -47,6 +47,14 @@ export default function DueloPilotosMenuPage() {
             </p>
           </article>
         </div>
+
+        <button
+            onClick={() => navigate("/duelos/pilotos/historial")}
+            className="mt-8 px-6 py-3 bg-gray-700 text-white font-bold rounded hover:bg-gray-600 transition"
+          >
+            Ver historial
+        </button>
+
       </section>
     </div>
   );
