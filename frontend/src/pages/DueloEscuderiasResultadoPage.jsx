@@ -9,7 +9,7 @@ function renderEstadoCarrera(piloto){
 }
 
 
-function EscuderiaDetalleCard({ escuderia, esCarrera }) {
+function EscuderiaDetalleCard({ escuderia, esCarrera, esUsuario }) {
   return (
     <div className="bg-neutral-800 rounded-xl p-5">
       <h2 className="text-2xl font-bold text-white mb-3">
@@ -62,6 +62,26 @@ function EscuderiaDetalleCard({ escuderia, esCarrera }) {
                 </p>
                 <p className="text-gray-300">
                   Válido: {piloto.valido ? "Sí" : "No"}
+                </p>
+              </>
+            )}
+
+            {esUsuario && (
+              <>
+                <p className="text-gray-300">
+                  Estrategia de neumaticos
+                </p>
+                <p className="text-gray-300">
+                  Bonus compuesto: {piloto.bonus_compuesto}
+                </p>
+                <p className="text-gray-300">
+                  Compuesto elegido: {piloto.compuesto_elegido ?? "No elegido"}
+                </p>
+                <p className="text-gray-300">
+                  Compuesto real: {piloto.compuesto_real ?? "No disponible"}
+                </p>
+                <p className="text-gray-300">
+                  Acierto compuesto: {piloto.acierto_compuesto ? "Sí" : "No"}
                 </p>
               </>
             )}
@@ -136,8 +156,8 @@ export default function DueloEscuderiasResultadoPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <EscuderiaDetalleCard escuderia={resultado.escuderia_usuario} esCarrera={esCarrera} />
-            <EscuderiaDetalleCard escuderia={resultado.escuderia_rival} esCarrera={esCarrera} />
+            <EscuderiaDetalleCard escuderia={resultado.escuderia_usuario} esCarrera={esCarrera} esUsuario={true}/>
+            <EscuderiaDetalleCard escuderia={resultado.escuderia_rival} esCarrera={esCarrera} esUsuario={false}/>
           </div>
 
           <button

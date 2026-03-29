@@ -1,17 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import DueloEscuderiasForm from "../components/duelos/DueloEscuderiasForm";
-import { simularDueloEscuderiasCarrera } from "../services/dueloEscuderiasService";
 
 export default function DueloEscuderiasCarreraPage() {
   const navigate = useNavigate();
 
-  async function handleSubmit(payload) {
-    console.log("Payload carrera escuderías:", payload);
-    
-    const resultado = await simularDueloEscuderiasCarrera(payload);
+  async function handleContinue(payload, escuderias) {
+    const escuderiaUsuario = escuderias.find( (escuderia) => escuderia.id === payload.escuderia_id_1);
 
-    navigate("/duelos/escuderias/resultado", { state: {resultado}})
+    navigate("/duelos/escuderias/carrera/neumaticos", { 
+      state: {
+        configDuelo: payload,
+        escuderiaUsuario
+      }})
   }
 
   return (
@@ -27,7 +28,7 @@ export default function DueloEscuderiasCarreraPage() {
         </button>
       </section>
 
-      <DueloEscuderiasForm modo="carrera" onSubmit={handleSubmit} />
+      <DueloEscuderiasForm modo="carrera" onContinue={handleContinue} />
     </div>
   );
 }

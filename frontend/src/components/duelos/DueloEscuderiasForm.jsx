@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchDatosDueloEscuderias } from "../../services/dueloEscuderiasService";
 import { useNavigate } from "react-router-dom";
 
-export default function DueloEscuderiasForm({ modo, onSubmit }) {
+export default function DueloEscuderiasForm({ modo, onContinue }) {
   const navigate = useNavigate();
 
   const [escuderias, setEscuderias] = useState([]);
@@ -17,7 +17,6 @@ export default function DueloEscuderiasForm({ modo, onSubmit }) {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     async function cargarDatos() {
@@ -42,7 +41,6 @@ export default function DueloEscuderiasForm({ modo, onSubmit }) {
     e.preventDefault();
 
     try {
-      setSubmitting(true);
       setError("");
 
       if (!escuderiaUsuarioId) {
@@ -72,14 +70,12 @@ export default function DueloEscuderiasForm({ modo, onSubmit }) {
         payload.circuito_key = Number(circuitoKey);
       }
 
-      await onSubmit(payload);
+      onContinue(payload, escuderias);
     } catch (err) {
       setError(err.message);
       window.scrollTo({
         top: 0
       });
-    } finally {
-      setSubmitting(false);
     }
   }
 
@@ -207,10 +203,9 @@ export default function DueloEscuderiasForm({ modo, onSubmit }) {
 
           <button
             type="submit"
-            disabled={submitting}
             className="px-6 py-3 bg-[#FFEB00] text-black font-bold rounded hover:brightness-95 transition disabled:opacity-50"
           >
-            {submitting ? "Simulando..." : "Simular duelo"}
+            Continuar a neumaticos
           </button>
         </form>
       )}

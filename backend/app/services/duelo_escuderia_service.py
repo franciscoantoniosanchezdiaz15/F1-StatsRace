@@ -230,7 +230,9 @@ def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_us
             except (Exception):
                 puntos = 0.0
 
-        compuesto_elegido = compuestos_usuario.get(piloto.driver_number)
+        print(compuestos_usuario)
+        print(type(compuestos_usuario.get(piloto.driver_number)))
+        compuesto_elegido = compuestos_usuario.get(str(piloto.driver_number))
 
         info_compuesto = resolver_compuesto_piloto(
             session_key, piloto.driver_number, compuesto_elegido, "carrera")
@@ -241,6 +243,9 @@ def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_us
         datos_piloto["valor"] = valor_final_piloto
         datos_piloto["valido"] = valido
         datos_piloto["bonus_compuesto"] = info_compuesto["bonus_compuesto"]
+        datos_piloto["compuesto_elegido"] = info_compuesto["compuesto_elegido"]
+        datos_piloto["compuesto_real"] = info_compuesto["compuesto_real"]
+        datos_piloto["acierto_compuesto"] = info_compuesto["acierto_compuesto"]
 
         if resultado:
             datos_piloto["position"] = resultado.get("position")
@@ -317,17 +322,18 @@ def obtener_mejor_vuelta_piloto_con_detalle(session_key: int, piloto, compuestos
     mejor_vuelta = obtener_mejor_vuelta_piloto(
         session_key, piloto.driver_number)
 
-    compuesto_elegido = compuestos_usuario.get(piloto.driver_number)
+    compuesto_elegido = compuestos_usuario.get(str(piloto.driver_number))
 
     info_compuesto = resolver_compuesto_piloto(
         session_key, piloto.driver_number, compuesto_elegido, "mejor-tiempo")
 
     datos_piloto = crear_piloto_resumen_base(piloto)
     if mejor_vuelta is not None:
-        valor_fianl_piloto = mejor_vuelta - info_compuesto["bonus_compuesto"]
+        valor_fianl_piloto = mejor_vuelta + info_compuesto["bonus_compuesto"]
         datos_piloto["valor"] = round(valor_fianl_piloto, 3)
         datos_piloto["valido"] = True
     else:
+        valor_fianl_piloto = mejor_vuelta + info_compuesto["bonus_compuesto"]
         datos_piloto["valor"] = None
         datos_piloto["valido"] = False
 
@@ -379,14 +385,14 @@ def obtener_detalle_mejor_tiempo_escuderia(session_key: int, escuderia, compuest
     return resultado_final
 
 
-def calcular_resultado_duelo(escuderia_usuario, escuderia_rival, circuito_key: int, modo: str):
+def calcular_resultado_duelo(escuderia_usuario, escuderia_rival, circuito_key: int, modo: str, compuesto_usuario=None):
     session_key = obtener_session_key_por_circuito(circuito_key)
 
     if modo == "carrera":
         detalle_usuario = obtener_detalle_carrera_escuderia(
-            session_key, escuderia_usuario)
+            session_key, escuderia_usuario, compuesto_usuario)
         detalle_rival = obtener_detalle_carrera_escuderia(
-            session_key, escuderia_rival)
+            session_key, escuderia_rival, {})
 
         return {
             "valor_usuario": detalle_usuario["valor_final"],
@@ -397,9 +403,9 @@ def calcular_resultado_duelo(escuderia_usuario, escuderia_rival, circuito_key: i
 
     if modo == "mejor-tiempo":
         detalle_usuario = obtener_detalle_mejor_tiempo_escuderia(
-            session_key, escuderia_usuario)
+            session_key, escuderia_usuario, compuesto_usuario)
         detalle_rival = obtener_detalle_mejor_tiempo_escuderia(
-            session_key, escuderia_rival)
+            session_key, escuderia_rival, {})
 
         valor_usuario = detalle_usuario["valor_final"]
         valor_rival = detalle_rival["valor_final"]
@@ -417,7 +423,7 @@ def calcular_resultado_duelo(escuderia_usuario, escuderia_rival, circuito_key: i
     raise DueloInvalidoException()
 
 
-def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_circuito: str, escuderia_id_1: int, escuderia_id_2: int | None = None, circuito_key: int | None = None):
+def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_circuito: str, escuderia_id_1: int, escuderia_id_2: int | None = None, circuito_key: int | None = None, compuestos_usuario=None):
     escuderia_usuario = obtener_escuderia_por_id(escuderia_id_1)
     if not escuderia_usuario:
         raise EscuderiaNoEncontradaException()
@@ -434,6 +440,7 @@ def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_c
         escuderia_rival,
         circuito["circuit_key"],
         modo,
+        compuestos_usuario
     )
 
     valor_usuario = resultado_duelo["valor_usuario"]
