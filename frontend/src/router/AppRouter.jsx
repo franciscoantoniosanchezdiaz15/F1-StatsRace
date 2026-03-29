@@ -20,7 +20,8 @@ import DueloEscuderiasCarreraPage from "../pages/DueloEscuderiasCarreraPage";
 import DueloEscuderiasMejorTiempoPage from "../pages/DueloEscuderiasMejorTiempoPage";
 import DueloEscuderiasResultadoPage from "../pages/DueloEscuderiasResultadoPage";
 import DueloEscuderiasHistorialPage from "../pages/DueloEscuderiasHistorialPage";
-
+import DueloEscuderiasCarreraNeumaticosPage from "../pages/DueloEscuderiasCarreraNeumaticosPage";
+import DueloEscuderiasMejorTiempoNeumaticosPage from "../pages/DueloEscuderiasMejorTiempoNeumaticosPage";
 
 
 export default function AppRouter() {
@@ -48,6 +49,8 @@ export default function AppRouter() {
       <Route path="/duelos/escuderias/mejor-tiempo" element={<DueloEscuderiasMejorTiempoPage />} />
       <Route path="/duelos/escuderias/resultado" element={<DueloEscuderiasResultadoPage />} />
       <Route path="/duelos/escuderias/historial" element={<DueloEscuderiasHistorialPage />} />
+      <Route path="/duelos/escuderias/carrera/neumaticos" element={<DueloEscuderiasCarreraNeumaticosPage />} />
+      <Route path="/duelos/escuderias/mejor-tiempo/neumaticos" element={<DueloEscuderiasMejorTiempoNeumaticosPage />} />
     </Routes>
   );
 }

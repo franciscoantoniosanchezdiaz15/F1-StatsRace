@@ -1,17 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import DueloEscuderiasForm from "../components/duelos/DueloEscuderiasForm";
-import { simularDueloEscuderiasMejorTiempo } from "../services/dueloEscuderiasService";
 
 export default function DueloEscuderiasMejorTiempoPage() {
   const navigate = useNavigate();
 
-  async function handleSubmit(payload) {
-    console.log("Payload mejor tiempo escuderías:", payload);
+  async function handleContinue(payload, escuderias) {
+     const escuderiaUsuario = escuderias.find( (escuderia) => escuderia.id === payload.escuderia_id_1);
 
-    const resultado = await simularDueloEscuderiasMejorTiempo(payload);
-
-    navigate("/duelos/escuderias/resultado", { state: {resultado}})
+    navigate("/duelos/escuderias/mejor-tiempo/neumaticos", { 
+      state: {
+        configDuelo: payload,
+        escuderiaUsuario
+      }})
   }
 
   return (
@@ -27,7 +28,7 @@ export default function DueloEscuderiasMejorTiempoPage() {
         </button>
       </section>
 
-      <DueloEscuderiasForm modo="mejor-tiempo" onSubmit={handleSubmit} />
+      <DueloEscuderiasForm modo="mejor-tiempo" onContinue={handleContinue} />
     </div>
   );
 }
