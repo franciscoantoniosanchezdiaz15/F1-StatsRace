@@ -1,18 +1,20 @@
-import { fetchMisEscuderias } from "./escuderiaService";
+import { fetchMisEscuderias, fetchTodasEscuderias } from "./escuderiaService";
 import { fetchCircuitos } from "./circuitoService";
 
 const API_URL = "http://localhost:5000/api/duelos/escuderias";
 
 
 export async function fetchDatosDueloEscuderias() {
-  const [escuderias, circuitosData] = await Promise.all([
+  const [misEscuderias, circuitosData, todasEscuderias] = await Promise.all([
     fetchMisEscuderias(),
     fetchCircuitos(1),
+    fetchTodasEscuderias()
   ]);
 
   return {
-    escuderias,
+    misEscuderias,
     circuitos: circuitosData.circuitos,
+    todasEscuderias
   };
 }
 

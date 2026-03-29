@@ -109,3 +109,24 @@ export async function eliminarEscuderia(escuderiaId) {
 
   return data.data;
 }
+
+export async function fetchTodasEscuderias() {
+  const response = await fetch(`${API_URL}`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    let mensajeError = "Error obteniendo escuderías";
+
+    if (data && data.error && data.error.message) {
+      mensajeError = data.error.message;
+    }
+
+    throw new Error(mensajeError);
+  }
+
+  return data.data.escuderias;
+}

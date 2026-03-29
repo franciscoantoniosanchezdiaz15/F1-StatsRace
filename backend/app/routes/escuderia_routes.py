@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, session
-from app.services.escuderia_service import crear_escuderia_usuario, listar_escuderias_usuario, obtener_detalle_escuderia_usuario, eliminar_escuderia_usuario, obtener_pilotos_disponibles_con_precio
+from app.services.escuderia_service import crear_escuderia_usuario, listar_escuderias_usuario, obtener_detalle_escuderia_usuario, eliminar_escuderia_usuario, obtener_pilotos_disponibles_con_precio, listar_todas_escuderias
 from app.models.exceptions import EscuderiaNoEncontradaException, PresupuestoInsuficienteException, PilotosDuplicadosException, NumeroPilotosInvalidoException, EscuderiaNoAutorizadaException, NombreEscuderiaDuplicadoException, PilotoNoEncontradoException, NombreEscuderiaNoValidoException
 
 escuderia_bp = Blueprint("escuderias", __name__, url_prefix="/api/escuderias")
@@ -232,5 +232,27 @@ def eliminar_escuderia_route(escuderia_id):
             "ok": False,
             "error": {
                 "message": "Error eliminando escudería"
+            }
+        }), 500
+
+
+@escuderia_bp.route("", methods=["GET"])
+def listar_escuderias_route():
+    try:
+        escuderias = listar_todas_escuderias()
+
+        return jsonify({
+            "ok": True,
+            "data": {
+                "escuderias": escuderias
+            }
+        }), 200
+
+    except Exception as e:
+        print(f"Error en GET /api/escuderias: {e}")
+        return jsonify({
+            "ok": False,
+            "error": {
+                "message": "Error obteniendo escuderías"
             }
         }), 500

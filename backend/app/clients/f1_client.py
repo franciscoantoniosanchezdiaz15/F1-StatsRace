@@ -23,6 +23,7 @@ class OpenF1Client:
 
         try:
             response = requests.get(url)
+            response.raise_for_status()
             data = response.json()
             return data
         except Exception as e:
@@ -40,6 +41,7 @@ class OpenF1Client:
 
         try:
             response = requests.get(url)
+            response.raise_for_status()
             data = response.json()
 
             self._cachePilotos[session_key] = {
@@ -61,6 +63,7 @@ class OpenF1Client:
 
         try:
             response = requests.get(url)
+            response.raise_for_status()
             data = response.json()
             return data
         except Exception as e:
@@ -78,6 +81,7 @@ class OpenF1Client:
 
         try:
             response = requests.get(url)
+            response.raise_for_status()
             data = response.json()
 
             self._cacheEquipos[session_key] = {
@@ -109,6 +113,7 @@ class OpenF1Client:
 
         try:
             response = requests.get(url)
+            response.raise_for_status()
             data = response.json()
 
             self._cacheSessionResults[cache_key] = {
@@ -138,6 +143,7 @@ class OpenF1Client:
 
         try:
             response = requests.get(url)
+            response.raise_for_status()
             data = response.json()
 
             self._cacheLaps[cache_key] = {
@@ -164,6 +170,7 @@ class OpenF1Client:
 
         try:
             response = requests.get(url)
+            response.raise_for_status()
             data = response.json()
 
             self._cacheNeumaticos[cache_key] = {
