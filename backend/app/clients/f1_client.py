@@ -16,6 +16,7 @@ class OpenF1Client:
         self._cacheEquipos = OrderedDict()
         self._cacheSessionResults = OrderedDict()
         self._cacheLaps = OrderedDict()
+        self._cacheNeumaticos = OrderedDict()
 
     def fetch_carreras(self, year):
         url = f"{BASE_URL}/sessions?year={year}&session_type=Race&session_name=Race"
@@ -140,6 +141,32 @@ class OpenF1Client:
             data = response.json()
 
             self._cacheLaps[cache_key] = {
+                "payload": data,
+                "expiracion": time.time()
+            }
+
+            return data
+
+        except Exception as e:
+            print(f"Error desconocido: {str(e)}")
+            return None
+
+    def fetch_neumaticos_por_driver(self, session_key, driver_number):
+        cache_key = f"{session_key}:{driver_number}"
+
+        if cache_key in self._cacheNeumaticos:
+            data = self._cacheNeumaticos[cache_key]
+
+            if time.time() - data["expiracion"] < TIEMPO_LIMITE:
+                return data["payload"]
+
+        url = f"{BASE_URL}/stints?session_key={session_key}&driver_number={driver_number}"
+
+        try:
+            response = requests.get(url)
+            data = response.json()
+
+            self._cacheNeumaticos[cache_key] = {
                 "payload": data,
                 "expiracion": time.time()
             }

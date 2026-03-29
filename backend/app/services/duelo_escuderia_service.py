@@ -7,6 +7,7 @@ from app.repositories.escuderia_repo import obtener_escuderia_por_id
 from app.repositories.duelo_escuderia_repo import crear_duelo_escuderia, obtener_duelos_escuderia_usuario, obtener_duelo_escuderia_por_id, eliminar_duelo_escuderia
 from app.services.circuito_service import listar_circuitos_client
 from app.services.piloto_service import extraer_sessions_carrera
+from app.services.neumatico_service import resolver_compuesto_piloto
 from app.clients.f1_client import OpenF1Client
 
 client = OpenF1Client()
@@ -206,7 +207,10 @@ def obtener_lista_resultados_por_driver(resultados: list[dict]):
     return lista
 
 
-def obtener_detalle_carrera_escuderia(session_key: int, escuderia):
+def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_usuario=None):
+    if compuestos_usuario is None:
+        compuestos_usuario = {}
+
     driver_numbers = obtener_driver_numbers_escuderia(escuderia)
     resultados = obtener_resultados_pilotos(session_key, driver_numbers)
     lista_resultados = obtener_lista_resultados_por_driver(resultados)
@@ -226,9 +230,17 @@ def obtener_detalle_carrera_escuderia(session_key: int, escuderia):
             except (Exception):
                 puntos = 0.0
 
+        compuesto_elegido = compuestos_usuario.get(piloto.driver_number)
+
+        info_compuesto = resolver_compuesto_piloto(
+            session_key, piloto.driver_number, compuesto_elegido, "carrera")
+
+        valor_final_piloto = puntos + info_compuesto["bonus_compuesto"]
+
         datos_piloto = crear_piloto_resumen_base(piloto)
-        datos_piloto["valor"] = puntos
+        datos_piloto["valor"] = valor_final_piloto
         datos_piloto["valido"] = valido
+        datos_piloto["bonus_compuesto"] = info_compuesto["bonus_compuesto"]
 
         if resultado:
             datos_piloto["position"] = resultado.get("position")
@@ -298,27 +310,45 @@ def obtener_mejor_vuelta_piloto(session_key: int, driver_number: int):
     return min(vueltas_validas)
 
 
-def obtener_mejor_vuelta_piloto_con_detalle(session_key: int, piloto):
+def obtener_mejor_vuelta_piloto_con_detalle(session_key: int, piloto, compuestos_usuario=None):
+    if compuestos_usuario is None:
+        compuestos_usuario = {}
+
     mejor_vuelta = obtener_mejor_vuelta_piloto(
         session_key, piloto.driver_number)
 
+    compuesto_elegido = compuestos_usuario.get(piloto.driver_number)
+
+    info_compuesto = resolver_compuesto_piloto(
+        session_key, piloto.driver_number, compuesto_elegido, "mejor-tiempo")
+
     datos_piloto = crear_piloto_resumen_base(piloto)
     if mejor_vuelta is not None:
-        datos_piloto["valor"] = round(mejor_vuelta, 3)
+        valor_fianl_piloto = mejor_vuelta - info_compuesto["bonus_compuesto"]
+        datos_piloto["valor"] = round(valor_fianl_piloto, 3)
         datos_piloto["valido"] = True
     else:
         datos_piloto["valor"] = None
         datos_piloto["valido"] = False
 
+    datos_piloto["bonus_compuesto"] = info_compuesto["bonus_compuesto"]
+    datos_piloto["compuesto_elegido"] = info_compuesto["compuesto_elegido"]
+    datos_piloto["compuesto_real"] = info_compuesto["compuesto_real"]
+    datos_piloto["acierto_compuesto"] = info_compuesto["acierto_compuesto"]
+
     return datos_piloto
 
 
-def obtener_detalle_mejor_tiempo_escuderia(session_key: int, escuderia):
+def obtener_detalle_mejor_tiempo_escuderia(session_key: int, escuderia, compuestos_usuario=None):
+    if compuestos_usuario is None:
+        compuestos_usuario = {}
+
     pilotos_detalle = []
 
     for piloto in escuderia.pilotos:
         pilotos_detalle.append(
-            obtener_mejor_vuelta_piloto_con_detalle(session_key, piloto)
+            obtener_mejor_vuelta_piloto_con_detalle(
+                session_key, piloto, compuestos_usuario)
         )
 
     vueltas_validas = []
