@@ -1,6 +1,6 @@
 from app.models.escuderia import Escuderia
 from app.models.piloto_escuderia import PilotoEscuderia
-from app.repositories.escuderia_repo import obtener_escuderias_por_usuario, obtener_escuderia_por_id, obtener_escuderia_por_nombre_y_usuario, crear_escuderia, eliminar_escuderia, añadir_piloto_escuderia
+from app.repositories.escuderia_repo import obtener_escuderias_por_usuario, obtener_escuderia_por_id, obtener_escuderia_por_nombre_y_usuario, crear_escuderia, eliminar_escuderia, añadir_piloto_escuderia, obtener_escuderias
 from app.models.exceptions import EscuderiaNoEncontradaException, PresupuestoInsuficienteException, PilotosDuplicadosException, NumeroPilotosInvalidoException, EscuderiaNoAutorizadaException, NombreEscuderiaDuplicadoException, NombreEscuderiaNoValidoException
 
 from app.services.piloto_service import obtener_piloto_por_numero, listar_pilotos_client
@@ -174,3 +174,13 @@ def eliminar_escuderia_usuario(escuderia_id: int, usuario_id: int):
 
     eliminar_escuderia(escuderia)
     return True
+
+
+def listar_todas_escuderias():
+    escuderias = obtener_escuderias()
+
+    escuderias_adaptadas = []
+    for escuderia in escuderias:
+        escuderias_adaptadas.append(adaptar_escuderia(escuderia))
+
+    return escuderias_adaptadas

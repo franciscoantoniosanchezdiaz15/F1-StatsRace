@@ -30,3 +30,7 @@ def eliminar_escuderia(escuderia: Escuderia):
 def añadir_piloto_escuderia(piloto_escuderia: PilotoEscuderia):
     db.session.add(piloto_escuderia)
     db.session.commit()
+
+
+def obtener_escuderias():
+    return Escuderia.query.all()

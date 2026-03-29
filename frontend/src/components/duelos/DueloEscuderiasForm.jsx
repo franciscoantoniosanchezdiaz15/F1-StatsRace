@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 export default function DueloEscuderiasForm({ modo, onContinue }) {
   const navigate = useNavigate();
 
-  const [escuderias, setEscuderias] = useState([]);
+  const [misEscuderias, setMisEscuderias] = useState([]);
+  const [todasEscuderias, setTodasEscuderias] = useState([]);
+
   const [circuitos, setCircuitos] = useState([]);
 
   const [escuderiaUsuarioId, setEscuderiaUsuarioId] = useState("");
@@ -25,7 +27,8 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
         setError("");
 
         const data = await fetchDatosDueloEscuderias();
-        setEscuderias(data.escuderias);
+        setMisEscuderias(data.misEscuderias);
+        setTodasEscuderias(data.todasEscuderias);
         setCircuitos(data.circuitos);
       } catch (err) {
         setError(err.message);
@@ -70,7 +73,7 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
         payload.circuito_key = Number(circuitoKey);
       }
 
-      onContinue(payload, escuderias);
+      onContinue(payload, misEscuderias);
     } catch (err) {
       setError(err.message);
       window.scrollTo({
@@ -79,7 +82,7 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
     }
   }
 
-  const rivalesDisponibles = escuderias.filter(
+  const rivalesDisponibles = todasEscuderias.filter(
     (escuderia) => escuderia.id !== Number(escuderiaUsuarioId)
   );
 
@@ -92,7 +95,7 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
       {loading && <p className="text-white">Cargando datos...</p>}
       {error && <p className="text-red-400 mb-4">Error: {error}</p>}
 
-      {!loading && escuderias.length === 0 && (
+      {!loading && misEscuderias.length === 0 && (
         <div className="bg-neutral-900 rounded-2xl p-8 border border-neutral-700">
           <p className="text-white text-lg mb-4">
             No tienes ninguna escudería creada.
@@ -110,7 +113,7 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
         </div>
       )}
 
-      {!loading && escuderias.length > 0 && (
+      {!loading && misEscuderias.length > 0 && (
         <form
           onSubmit={handleSubmit}
           className="bg-neutral-900 rounded-2xl p-8 border border-neutral-700 space-y-6"
@@ -125,7 +128,7 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
               className="w-full px-4 py-3 rounded bg-neutral-800 text-white border border-neutral-600"
             >
               <option value="">Selecciona una escudería</option>
-              {escuderias.map((escuderia) => (
+              {misEscuderias.map((escuderia) => (
                 <option key={escuderia.id} value={escuderia.id}>
                   {escuderia.nombre}
                 </option>

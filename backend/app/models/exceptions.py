@@ -88,3 +88,7 @@ class RivalNoDisponibleException(Exception):
 
 class DueloEscuderiaNoEncontradoException(Exception):
     pass
+
+
+class DueloNoEncontradoException(Exception):
+    pass
