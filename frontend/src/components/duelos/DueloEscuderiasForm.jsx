@@ -87,26 +87,51 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
   );
 
   return (
-    <section className="max-w-5xl mx-auto px-10 py-10">
-      <h1 className="text-4xl font-bold text-[#FFEB00] mb-8">
-        Duelo de Escuderías - {modo === "carrera" ? "Carrera completa" : "Mejor tiempo"}
-      </h1>
+    <section className="max-w-7xl mx-auto px-6 py-12 animate-fade-in">
+      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+        
+        <div>
+          <span className="text-[#FFEB00] font-mono text-sm tracking-[0.3em] uppercase">Battle Configuration</span>
+          <h1 className="text-5xl font-black italic text-white uppercase tracking-tighter">
+            Duelo de <span className="text-[#FFEB00]">Escuderías</span>
+          </h1>
+        </div>
 
-      {loading && <p className="text-white">Cargando datos...</p>}
-      {error && <p className="text-red-400 mb-4">Error: {error}</p>}
+        <div className="flex items-center gap-4 bg-neutral-900 p-2 rounded-2xl border border-neutral-800">
+          <div className="px-6 py-3 rounded-xl bg-black border border-neutral-700">
+            <p className="text-[10px] text-neutral-500 uppercase font-bold mb-1">Modo de Juego</p>
+            <p className="text-[#FFEB00] font-black uppercase text-sm italic">
+              {modo === "carrera" ? "🏁 Full Race" : "⏱️ Best Lap"}
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      {loading && (
+        <div className="flex flex-col items-center justify-center h-64">
+          <div className="w-12 h-12 border-4 border-[#A6051A] border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-neutral-400 animate-pulse font-mono">Cargando formulario...</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="bg-red-900/20 border border-red-500 p-6 rounded-xl text-center">
+          <p className="text-red-400 font-bold uppercase">Error: {error}</p>
+        </div>
+      )}
 
       {!loading && misEscuderias.length === 0 && (
-        <div className="bg-neutral-900 rounded-2xl p-8 border border-neutral-700">
-          <p className="text-white text-lg mb-4">
-            No tienes ninguna escudería creada.
-          </p>
-          <p className="text-gray-400 mb-6">
-            Para simular un duelo primero debes crear tu escudería.
+        <div className="bg-neutral-900 rounded-[32px] p-12 border border-neutral-800 text-center shadow-2xl">
+          <div className="text-6xl mb-6">🛠️</div>
+          <h2 className="text-3xl font-black text-white uppercase italic mb-4">Garaje no detectado</h2>
+          <p className="text-neutral-400 mb-8 max-w-md mx-auto leading-relaxed">
+            No hemos encontrado ninguna escudería bajo tu mando. Necesitas un equipo para poder desafiar a otros.
           </p>
 
           <button
             onClick={() => navigate("/escuderias/crear")}
-            className="px-6 py-3 bg-[#FFEB00] text-black font-bold rounded hover:brightness-95 transition"
+            className="group relative px-8 py-4 bg-white text-black font-black uppercase tracking-widest rounded-full hover:bg-[#FFEB00] transition-all"
           >
             Crear escudería
           </button>
@@ -116,102 +141,155 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
       {!loading && misEscuderias.length > 0 && (
         <form
           onSubmit={handleSubmit}
-          className="bg-neutral-900 rounded-2xl p-8 border border-neutral-700 space-y-6"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
         >
-          <div>
-            <label className="block text-white font-bold mb-2">
-              Tu escudería
-            </label>
-            <select
-              value={escuderiaUsuarioId}
-              onChange={(e) => setEscuderiaUsuarioId(e.target.value)}
-              className="w-full px-4 py-3 rounded bg-neutral-800 text-white border border-neutral-600"
-            >
-              <option value="">Selecciona una escudería</option>
-              {misEscuderias.map((escuderia) => (
-                <option key={escuderia.id} value={escuderia.id}>
-                  {escuderia.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
+          <div className="lg:col-span-4 space-y-4">
+            <h3 className="text-xs font-black uppercase text-neutral-500 tracking-[0.2em] ml-2">01. Player One</h3>
+            <div className="bg-neutral-900 p-6 rounded-[32px] border-2 border-neutral-800 hover:border-[#FFEB00]/40 transition-colors group">
+              <div className="aspect-video w-full bg-black rounded-2xl mb-6 overflow-hidden border border-neutral-800 relative">
+                <div className="absolute inset-0 flex items-center justify-center text-neutral-800 text-xs font-mono uppercase">
+                   [ Photo_Preview_Escuderia ]
+                </div>
+                <div className="absolute bottom-4 left-4 bg-black/80 px-3 py-1 rounded text-[10px] text-[#FFEB00] font-bold uppercase italic">mi equipo</div>
+              </div>
 
-          <div>
-            <label className="block text-white font-bold mb-2">
-              Tipo de rival
-            </label>
-            <select
-              value={modoRival}
-              onChange={(e) => setModoRival(e.target.value)}
-              className="w-full px-4 py-3 rounded bg-neutral-800 text-white border border-neutral-600"
-            >
-              <option value="manual">Manual</option>
-              <option value="aleatorio">Aleatorio</option>
-            </select>
-          </div>
-
-          {modoRival === "manual" && (
-            <div>
-              <label className="block text-white font-bold mb-2">
-                Escudería rival
-              </label>
+              <label className="block text-[10px] text-neutral-500 font-black uppercase mb-2 ml-1">Selecciona tu escuderia</label>  
+              
               <select
-                value={escuderiaRivalId}
-                onChange={(e) => setEscuderiaRivalId(e.target.value)}
-                className="w-full px-4 py-3 rounded bg-neutral-800 text-white border border-neutral-600"
+                value={escuderiaUsuarioId}
+                onChange={(e) => setEscuderiaUsuarioId(e.target.value)}
+                className="w-full px-5 py-4 rounded-2xl bg-black text-white border border-neutral-700 focus:border-[#FFEB00] outline-none font-bold transition-all appearance-none cursor-pointer"
               >
-                <option value="">Selecciona una escudería rival</option>
-                {rivalesDisponibles.map((escuderia) => (
+                <option value="">Selecciona una escudería</option>
+                {misEscuderias.map((escuderia) => (
                   <option key={escuderia.id} value={escuderia.id}>
                     {escuderia.nombre}
                   </option>
                 ))}
               </select>
             </div>
-          )}
-
-          <div>
-            <label className="block text-white font-bold mb-2">
-              Tipo de circuito
-            </label>
-            <select
-              value={modoCircuito}
-              onChange={(e) => setModoCircuito(e.target.value)}
-              className="w-full px-4 py-3 rounded bg-neutral-800 text-white border border-neutral-600"
-            >
-              <option value="manual">Elegir circuito</option>
-              <option value="aleatorio">Aleatorio</option>
-            </select>
           </div>
 
-          {modoCircuito === "manual" && (
-            <div>
-              <label className="block text-white font-bold mb-2">
-                Circuito
-              </label>
-              <select
-                value={circuitoKey}
-                onChange={(e) => setCircuitoKey(e.target.value)}
-                className="w-full px-4 py-3 rounded bg-neutral-800 text-white border border-neutral-600"
-              >
-                <option value="">Selecciona un circuito</option>
-                {circuitos.map((circuito) => (
-                  <option key={circuito.circuit_key} value={circuito.circuit_key}>
-                    {circuito.circuit_short_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+          <div className="lg:col-span-4 space-y-6 pt-8">
+             <div className="text-center">
+                <div className="inline-block px-4 py-1 bg-neutral-800 rounded-full text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-4">
+                   VS
+                </div>
+             </div>
 
-          <button
-            type="submit"
-            className="px-6 py-3 bg-[#FFEB00] text-black font-bold rounded hover:brightness-95 transition disabled:opacity-50"
-          >
-            Continuar a neumaticos
-          </button>
+             <div className="bg-gradient-to-b from-neutral-800/50 to-neutral-900 p-8 rounded-[40px] border border-neutral-700 shadow-xl relative overflow-hidden">
+                <div className="relative z-10">
+                    <h3 className="text-center text-white font-black italic uppercase text-xl mb-6 flex items-center justify-center gap-2">
+                        <span className="text-2xl">🌍</span> Localización
+                    </h3>
+                    
+                    <div className="grid grid-cols-2 gap-3 mb-6">
+                        <button
+                            type="button"
+                            onClick={() => setModoCircuito("manual")}
+                            className={`py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${modoCircuito === "manual" ? 'bg-[#FFEB00] text-black border-[#FFEB00]' : 'bg-black text-neutral-500 border-neutral-800'}`}
+                        >
+                            Selección
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setModoCircuito("aleatorio")}
+                            className={`py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${modoCircuito === "aleatorio" ? 'bg-[#FFEB00] text-black border-[#FFEB00]' : 'bg-black text-neutral-500 border-neutral-800'}`}
+                        >
+                            Random
+                        </button>
+                    </div>
+
+                    {modoCircuito === "manual" && (
+                        <div className="space-y-4 animate-fade-in">
+                           <div className="aspect-square w-32 mx-auto bg-black rounded-full border-4 border-neutral-800 flex items-center justify-center overflow-hidden">
+                                {/* --- AQUÍ PUEDES PONER TU FOTO DEL MAPA DEL CIRCUITO --- */}
+                                <span className="text-neutral-700 text-[8px] uppercase font-mono text-center px-4">[ Track_Map ]</span>
+                           </div>
+                            <select
+                                value={circuitoKey}
+                                onChange={(e) => setCircuitoKey(e.target.value)}
+                                className="w-full px-5 py-4 rounded-2xl bg-black text-white border border-neutral-700 focus:border-[#FFEB00] outline-none font-bold transition-all text-sm"
+                            >
+                                <option value="">Elegir Pista...</option>
+                                {circuitos.map((c) => (
+                                <option key={c.circuit_key} value={c.circuit_key}>🚩 {c.circuit_short_name}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
+                    {modoCircuito === "aleatorio" && (
+                        <div className="py-10 text-center animate-pulse">
+                            <span className="text-4xl">🎲</span>
+                            <p className="text-neutral-500 text-[10px] uppercase font-bold mt-2 tracking-tighter text-wrap">El sistema elegirá un circuito al azar</p>
+                        </div>
+                    )}
+                </div>
+             </div>
+
+             <button
+                type="submit"
+                className="w-full group bg-[#FFEB00] hover:bg-white p-5 rounded-[24px] shadow-[0_15px_30px_-10px_rgba(255,235,0,0.3)] transition-all flex items-center justify-center gap-3 active:scale-95"
+              >
+                <span className="text-black font-black uppercase italic tracking-widest text-sm">Configurar Neumáticos</span>
+                <span className="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center group-hover:translate-x-2 transition-transform">→</span>
+              </button>
+          </div>
+
+          <div className="lg:col-span-4 space-y-4">
+            <h3 className="text-xs font-black uppercase text-neutral-500 tracking-[0.2em] ml-2 text-right">02. Opponent</h3>
+            <div className="bg-neutral-900 p-6 rounded-[32px] border-2 border-neutral-800 hover:border-red-600/40 transition-colors group">
+              <div className="aspect-video w-full bg-black rounded-2xl mb-6 overflow-hidden border border-neutral-800 relative">
+                {/* --- AQUÍ PUEDES PONER TU FOTO DE RIVAL --- */}
+                <div className="absolute inset-0 flex items-center justify-center text-neutral-800 text-xs font-mono uppercase italic">
+                   [ Rival_Visual_Data ]
+                </div>
+                <div className="absolute top-4 right-4 bg-red-600 px-3 py-1 rounded text-[10px] text-white font-black uppercase italic">Target</div>
+              </div>
+
+              <div className="flex gap-2 mb-4">
+                 <button 
+                   type="button" 
+                   onClick={() => setModoRival("manual")}
+                   className={`flex-1 py-2 text-[10px] font-black rounded-lg transition-all ${modoRival === "manual" ? 'bg-white text-black' : 'bg-neutral-800 text-neutral-500'}`}
+                 >ESPECÍFICO</button>
+                 <button 
+                   type="button" 
+                   onClick={() => setModoRival("aleatorio")}
+                   className={`flex-1 py-2 text-[10px] font-black rounded-lg transition-all ${modoRival === "aleatorio" ? 'bg-white text-black' : 'bg-neutral-800 text-neutral-500'}`}
+                 >RANDOM</button>
+              </div>
+              
+              {modoRival === "manual" ? (
+                <div className="animate-fade-in">
+                    <label className="block text-[10px] text-neutral-500 font-black uppercase mb-2 ml-1 text-right">Escoge tu enemigo</label>
+                    <select
+                        value={escuderiaRivalId}
+                        onChange={(e) => setEscuderiaRivalId(e.target.value)}
+                        className="w-full px-5 py-4 rounded-2xl bg-black text-white border border-neutral-700 focus:border-red-600 outline-none font-bold transition-all appearance-none cursor-pointer"
+                    >
+                        <option value="">-- Seleccionar Rival --</option>
+                        {rivalesDisponibles.map((esc) => (
+                        <option key={esc.id} value={esc.id}>💀 {esc.nombre}</option>
+                        ))}
+                    </select>
+                </div>
+              ) : (
+                <div className="h-[76px] flex items-center justify-center bg-black/40 rounded-2xl border border-dashed border-neutral-800 italic text-neutral-600 text-xs">
+                    Rival aleatorio activado...
+                </div>
+              )}
+            </div>
+          </div>
+
         </form>
       )}
+
+      <div className="mt-12 text-center">
+        <p className="text-[10px] font-mono text-neutral-600 uppercase tracking-[0.5em]">Sistema: Listo para correr</p>
+      </div>
+        
     </section>
   );
 }

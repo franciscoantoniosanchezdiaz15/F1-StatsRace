@@ -43,31 +43,53 @@ export default function EscuderiasPage() {
 
       <section className="max-w-7xl mx-auto px-10 py-10">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold text-[#FFEB00]">
-            Mis Escuderías
-          </h1>
+          <div>
+            <h1 className="text-6xl font-black italic uppercase tracking-tighter leading-none mb-4">
+              Mis <span className="text-[#FFEB00]">Equipos</span>
+            </h1>
+            <div className="flex items-center gap-3">
+              <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+              <p className="text-neutral-500 font-bold uppercase tracking-[0.3em] text-[10px]">
+                central de gestión de equipos
+              </p>
+            </div>
+          </div>
 
-          <button
-            onClick={() => navigate("/escuderias/crear")}
-            className="px-5 py-2 bg-[#FFEB00] text-black font-bold rounded hover:brightness-95 transition"
-          >
-            Crear escudería
-          </button>
-
-          <button
-            onClick={() => navigate("/duelos/escuderias")}
-            className="px-5 py-2 bg-[#FFEB00] text-black font-bold rounded hover:brightness-95 transition"
-          >
-            Competir
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => navigate("/escuderias/crear")}
+              className="px-8 py-4 bg-white text-black font-black uppercase text-xs tracking-widest rounded-none hover:bg-[#FFEB00] transition-all skew-x-[-12deg]"
+            >
+              <span className="inline-block skew-x-[12deg]">+ Nueva Escudería</span>
+            </button>
+            
+            <button
+              onClick={() => navigate("/duelos/escuderias")}
+              className="px-8 py-4 bg-[#FFEB00] text-black font-black uppercase text-xs tracking-widest rounded-none hover:brightness-110 transition-all skew-x-[-12deg]"
+            >
+              <span className="inline-block skew-x-[12deg]">Ir a Competición</span>
+            </button>
+          </div>
 
         </div>
 
-        {loading && <p className="text-white">Cargando escuderías...</p>}
-        {error && <p className="text-red-400">Error: {error}</p>}
+        {loading && (
+          <div className="flex flex-col items-center justify-center h-64">
+            <div className="w-12 h-12 border-4 border-[#A6051A] border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-neutral-400 animate-pulse font-mono">Cargando circuito...</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="bg-red-900/20 border border-red-500 p-6 rounded-xl text-center">
+            <p className="text-red-400 font-bold uppercase">Error: {error}</p>
+          </div>
+        )}
 
         {!loading && !error && escuderias.length === 0 && (
-          <p className="text-gray-300">Aún no has creado ninguna escudería.</p>
+          <div className="text-center py-20 bg-neutral-900/20 border border-white/5 rounded-3xl">
+            <p className="text-neutral-500 font-black italic uppercase text-2xl tracking-tighter">No hay unidades registradas</p>
+          </div>
         )}
 
         {!loading && !error && escuderias.length > 0 && (
@@ -75,48 +97,64 @@ export default function EscuderiasPage() {
             {escuderias.map((escuderia) => (
               <article
                 key={escuderia.id}
-                className="bg-neutral-900 rounded-xl p-6 border border-neutral-700 shadow-lg"
+                className="group relative bg-[#0f0f0f] border border-white/5 hover:border-[#FFEB00]/50 transition-all duration-500 p-8 rounded-[2rem] overflow-hidden"
               >
-                <h2 className="text-2xl font-bold text-white mb-3">
-                  {escuderia.nombre}
-                </h2>
+                <span className="absolute top-4 right-2 text-9xl font-black italic text-white/[0.02] pointer-events-none group-hover:text-[#FFEB00]/[0.05] transition-colors uppercase">
+                  {escuderia.nombre.substring(0, 2)}
+                </span>
 
-                <p className="text-gray-300 mb-2">
-                  <strong>Presupuesto:</strong> {escuderia.presupuesto_max}
-                </p>
+                <div className="relative z-10">
+                  <div className="flex justify-between items-start mb-8">    
+                    <h2 className="text-2xl font-bold text-white mb-3">
+                      {escuderia.nombre}
+                    </h2>
+                  </div>
 
-                <p className="text-gray-300 mb-4">
-                  <strong>Coste total:</strong> {escuderia.coste_total}
-                </p>
+                  <div className="grid grid-cols-2 gap-4 mb-8">
+                    <div className="bg-white/5 p-4 rounded-2xl">
+                      <p className="text-[9px] text-neutral-500 font-black uppercase tracking-widest mb-1">Presupuesto</p>
+                      <p className="text-2xl font-black italic text-white">{escuderia.presupuesto_max}M</p>
+                    </div>
+                    <div className="bg-white/5 p-4 rounded-2xl">
+                      <p className="text-[9px] text-neutral-500 font-black uppercase tracking-widest mb-1">Coste Real</p>
+                      <p className={`text-2xl font-black italic ${escuderia.coste_total > escuderia.presupuesto_max ? 'text-red-500' : 'text-[#FFEB00]'}`}>
+                        {escuderia.coste_total}M
+                      </p>
+                    </div>
+                  </div>
 
-                <div className="mb-4">
-                  <h3 className="text-lg font-bold text-white mb-2">
-                    Pilotos
-                  </h3>
+                  <div className="mb-8">
+                    <p className="text-[10px] font-black text-neutral-600 uppercase tracking-[0.4em] mb-4 border-b border-white/5 pb-2">Lineup</p>
+                    <div className="space-y-3">
+                      {escuderia.pilotos.map((piloto) => (
+                        <div key={piloto.id} className="flex justify-between items-center group/item">
+                          <div>
+                            <p className="font-black italic uppercase tracking-tight text-sm text-neutral-200">{piloto.full_name}</p>
+                            <p className="text-[9px] font-bold text-neutral-500 uppercase">{piloto.team_name}</p>
+                          </div>
+                          <span className="text-[10px] font-black text-white px-2 py-1 bg-white/5 rounded italic group-hover/item:bg-[#FFEB00] group-hover/item:text-black transition-colors">
+                            {piloto.precio}M
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
-                  <ul className="text-gray-300 space-y-1">
-                    {escuderia.pilotos.map((piloto) => (
-                      <li key={piloto.id}>
-                        {piloto.full_name} - {piloto.team_name} ({piloto.precio})
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  <div className="flex gap-4 pt-6 border-t border-white/5">
+                    <button
+                      onClick={() => navigate(`/escuderias/${escuderia.id}`)}
+                      className="flex-1 py-3 bg-neutral-800 text-white font-black uppercase text-[10px] tracking-widest rounded-xl hover:bg-white hover:text-black transition-all"
+                    >
+                      Ver detalle
+                    </button>
 
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => navigate(`/escuderias/${escuderia.id}`)}
-                    className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition"
-                  >
-                    Ver detalle
-                  </button>
-
-                  <button
-                    onClick={() => handleEliminar(escuderia.id)}
-                    className="px-4 py-2 bg-red-700 text-white rounded hover:bg-red-600 transition"
-                  >
-                    Eliminar
-                  </button>
+                    <button
+                      onClick={() => handleEliminar(escuderia.id)}
+                      className="px-6 py-3 border border-red-900/30 text-red-500/50 font-black uppercase text-[10px] tracking-widest rounded-xl hover:bg-red-600 hover:text-white transition-all"
+                    >
+                      Depedir pilotos
+                    </button>
+                  </div>
                 </div>
               </article>
             ))}

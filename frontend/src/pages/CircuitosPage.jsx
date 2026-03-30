@@ -66,7 +66,9 @@ export default function CircuitosPage() {
         )}
 
         {!loading && !error && circuitos.length === 0 && (
-          <p className="text-gray-300">No hay circuitos disponibles.</p>
+          <div className="bg-red-900/20 border border-red-500 p-6 rounded-xl text-center">
+            <p  className="text-red-400 font-bold uppercase">No hay circuitos disponibles.</p>
+          </div>
         )}
 
         {!loading && !error && circuitos.length > 0 && (
