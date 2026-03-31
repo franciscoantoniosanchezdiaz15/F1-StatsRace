@@ -26,10 +26,10 @@ function LoadingScreen() {
      <div className="relative z-10 w-full max-w-2xl flex flex-col items-center text-center">
         
         <div className="mb-8 flex items-center justify-center">
-           <div className="relative">
-              <div className="w-16 h-16 border-2 border-[#A6051A]/30 rounded-full"></div>
-              <div className="absolute inset-0 border-t-2 border-[#FFEB00] rounded-full animate-spin"></div>
-           </div>
+          <div className="relative">
+            <div className="w-16 h-16 border-2 border-[#A6051A]/30 rounded-full"></div>
+            <div className="absolute inset-0 border-t-2 border-[#FFEB00] rounded-full animate-spin"></div>
+          </div>
         </div>
 
         <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">
@@ -58,7 +58,7 @@ function LoadingScreen() {
             <span className="ml-2 text-[10px] text-neutral-600 uppercase">Terminal v1.0.4</span>
           </div>
           <p className="text-[#FFEB00] text-xs uppercase animate-pulse">
-              Preparando estadísticas, pilotos y simulaciones de carrera.
+            Preparando estadísticas, pilotos y simulaciones de carrera.
           </p>
           <p className="text-neutral-700 text-[9px] mt-2 uppercase tracking-widest">
             F1_STATS_RACE: OK... Estado: optimo...

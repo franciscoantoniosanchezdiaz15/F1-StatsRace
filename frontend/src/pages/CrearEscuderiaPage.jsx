@@ -191,6 +191,7 @@ export default function CrearEscuderiaPage() {
                         <div className="h-10 w-[1px] bg-neutral-800 hidden md:block"></div>
                         <div className="hidden md:block">
                             <p className="text-[10px] text-neutral-500 font-black uppercase mb-1">Lineup</p>
+                            {/* para poner los dos puntos q se ponen amarilllo cuando selecciono un piloto */}
                             <div className="flex gap-2">
                                 {[...Array(2)].map((_, i) => (
                                     <div key={i} className={`w-3 h-3 rounded-full ${i < pilotosSeleccionados.length ? 'bg-[#FFEB00]' : 'bg-neutral-700'}`}></div>

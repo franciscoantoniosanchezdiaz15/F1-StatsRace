@@ -111,7 +111,7 @@ export default function EscuderiaDetallePage() {
 
               <div className="lg:col-span-2">
                 <h2 className="text-[10px] font-black text-neutral-500 uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
-                   Official Lineup <div className="h-px bg-white/5 flex-1"></div>
+                  Official Lineup <div className="h-px bg-white/5 flex-1"></div>
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -122,7 +122,7 @@ export default function EscuderiaDetallePage() {
                     >
                       <div className="mb-6">
                          <span className="text-[9px] font-black bg-white/10 px-2 py-0.5 rounded text-neutral-400 uppercase tracking-widest">
-                            Driver Profile
+                          Driver Profile
                          </span>
                       </div>
 

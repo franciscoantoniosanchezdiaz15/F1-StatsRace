@@ -94,19 +94,19 @@ export default function DuelosPage() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-neutral-900 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex gap-10">
-                <div className="flex flex-col">
-                    <span className="text-[10px] text-neutral-600 uppercase font-black">Latencia</span>
-                    <span className="text-xs font-mono text-green-500">0.002s</span>
-                </div>
-                <div className="flex flex-col">
-                    <span className="text-[10px] text-neutral-600 uppercase font-black">Algoritmo</span>
-                    <span className="text-xs font-mono">Francisco A.</span>
-                </div>
-            </div>
-            <p className="text-[10px] font-mono text-neutral-700 uppercase tracking-[0.4em]">
-              Entorno de simulación autorizado
-            </p>
+          <div className="flex gap-10">
+              <div className="flex flex-col">
+                <span className="text-[10px] text-neutral-600 uppercase font-black">Latencia</span>
+                <span className="text-xs font-mono text-green-500">0.002s</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] text-neutral-600 uppercase font-black">Algoritmo</span>
+                <span className="text-xs font-mono">Francisco A.</span>
+              </div>
+          </div>
+          <p className="text-[10px] font-mono text-neutral-700 uppercase tracking-[0.4em]">
+            Entorno de simulación autorizado
+          </p>
         </div>
       </section>
     </div>

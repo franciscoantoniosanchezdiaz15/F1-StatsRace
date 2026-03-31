@@ -75,7 +75,6 @@ function ModeCard({ title, description, image, onClick }) {
         </p>
       </div>
 
-      {/* Indicador visual de "Acción" */}
       <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-[#FFEB00] flex items-center justify-center scale-0 group-hover:scale-100 transition-transform duration-500 shadow-[0_0_20px_rgba(255,235,0,0.4)]">
         <span className="text-black text-2xl font-bold">→</span>
       </div>

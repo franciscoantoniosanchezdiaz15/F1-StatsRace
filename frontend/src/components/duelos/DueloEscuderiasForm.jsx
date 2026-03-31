@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { fetchDatosDueloEscuderias } from "../../services/dueloEscuderiasService";
 import { useNavigate } from "react-router-dom";
+import circuitosFoto from "../../assets/circuitos_foto.png";
+import usuario from "../../assets/usuario.png";
+import rival from "../../assets/rivales.png";
 
 export default function DueloEscuderiasForm({ modo, onContinue }) {
   const navigate = useNavigate();
@@ -148,7 +151,10 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
             <div className="bg-neutral-900 p-6 rounded-[32px] border-2 border-neutral-800 hover:border-[#FFEB00]/40 transition-colors group">
               <div className="aspect-video w-full bg-black rounded-2xl mb-6 overflow-hidden border border-neutral-800 relative">
                 <div className="absolute inset-0 flex items-center justify-center text-neutral-800 text-xs font-mono uppercase">
-                   [ Photo_Preview_Escuderia ]
+                   <img 
+                    src={usuario}
+                    alt="circuitos"
+                  />
                 </div>
                 <div className="absolute bottom-4 left-4 bg-black/80 px-3 py-1 rounded text-[10px] text-[#FFEB00] font-bold uppercase italic">mi equipo</div>
               </div>
@@ -203,8 +209,10 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
                     {modoCircuito === "manual" && (
                         <div className="space-y-4 animate-fade-in">
                            <div className="aspect-square w-32 mx-auto bg-black rounded-full border-4 border-neutral-800 flex items-center justify-center overflow-hidden">
-                                {/* --- AQUÍ PUEDES PONER TU FOTO DEL MAPA DEL CIRCUITO --- */}
-                                <span className="text-neutral-700 text-[8px] uppercase font-mono text-center px-4">[ Track_Map ]</span>
+                              <img 
+                                src={circuitosFoto}
+                                alt="circuitos"
+                              />
                            </div>
                             <select
                                 value={circuitoKey}
@@ -241,9 +249,11 @@ export default function DueloEscuderiasForm({ modo, onContinue }) {
             <h3 className="text-xs font-black uppercase text-neutral-500 tracking-[0.2em] ml-2 text-right">02. Opponent</h3>
             <div className="bg-neutral-900 p-6 rounded-[32px] border-2 border-neutral-800 hover:border-red-600/40 transition-colors group">
               <div className="aspect-video w-full bg-black rounded-2xl mb-6 overflow-hidden border border-neutral-800 relative">
-                {/* --- AQUÍ PUEDES PONER TU FOTO DE RIVAL --- */}
                 <div className="absolute inset-0 flex items-center justify-center text-neutral-800 text-xs font-mono uppercase italic">
-                   [ Rival_Visual_Data ]
+                   <img 
+                    src={rival}
+                    alt="circuitos"
+                  />
                 </div>
                 <div className="absolute top-4 right-4 bg-red-600 px-3 py-1 rounded text-[10px] text-white font-black uppercase italic">Target</div>
               </div>

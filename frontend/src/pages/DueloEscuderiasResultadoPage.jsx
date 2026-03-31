@@ -55,13 +55,13 @@ function EscuderiaDetalleCard({ escuderia, esCarrera, esUsuario }) {
             {esUsuario && (
               <div className="mt-3 pt-3 border-t border-neutral-700 grid grid-cols-2 gap-2">
                 <div className="flex items-center gap-2">
-                    <div className={`w-3 h-3 rounded-full ${piloto.acierto_compuesto ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                    <span className="text-[10px] font-bold text-neutral-400 uppercase">Elección</span>
+                  <div className={`w-3 h-3 rounded-full ${piloto.acierto_compuesto ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase">Elección</span>
                 </div>
                 <div className="text-right">
-                    <span className="text-[10px] font-black text-white px-2 py-0.5 bg-black rounded uppercase tracking-tighter">
-                        {piloto.compuesto_elegido}
-                    </span>
+                  <span className="text-[10px] font-black text-white px-2 py-0.5 bg-black rounded uppercase tracking-tighter">
+                      {piloto.compuesto_elegido}
+                  </span>
                 </div>
               </div>
             )}
@@ -70,8 +70,8 @@ function EscuderiaDetalleCard({ escuderia, esCarrera, esUsuario }) {
       </div>
 
       <div className={`mt-8 p-4 rounded-2xl text-center ${esUsuario ? 'bg-[#FFEB00]' : 'bg-white'}`}>
-          <p className="text-[10px] text-black/60 font-black uppercase tracking-[0.2em]">{esCarrera ? "Puntuación Final" : "Tiempo Total"}</p>
-          <p className="text-3xl font-black italic text-black tracking-tighter uppercase">{escuderia.valor_final}</p>
+        <p className="text-[10px] text-black/60 font-black uppercase tracking-[0.2em]">{esCarrera ? "Puntuación Final" : "Tiempo Total"}</p>
+        <p className="text-3xl font-black italic text-black tracking-tighter uppercase">{escuderia.valor_final}</p>
       </div>
 
     </div>
@@ -113,22 +113,22 @@ export default function DueloEscuderiasResultadoPage() {
        <section className="max-w-6xl mx-auto px-6 relative z-10">
           <div className="flex flex-col items-center text-center">
             <div className={`mb-6 p-4 rounded-full ${ganoUsuario ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'} animate-bounce`}>
-               {ganoUsuario ? "Win" : "Defeat"}
+              {ganoUsuario ? "Win" : "Defeat"}
             </div>
             <h1 className="text-6xl md:text-6xl font-black italic uppercase tracking-tighter mb-4 leading-none">
-                {ganoUsuario ? <span className="text-green-500">Victory</span> : <span className="text-red-500">Defeat</span>}
+              {ganoUsuario ? <span className="text-green-500">Victory</span> : <span className="text-red-500">Defeat</span>}
             </h1>
             <p className="text-neutral-500 font-black uppercase tracking-[0.4em] mb-12">Race Classification Finalized</p>
 
             <div className="flex items-center gap-8 md:gap-20 bg-neutral-900/80 backdrop-blur-xl p-8 rounded-[40px] border border-white/10 shadow-2xl">
                 <div className="text-center">
-                    <p className="text-[10px] text-neutral-500 font-black uppercase mb-1 tracking-widest">Tu Resultado</p>
-                    <p className="text-4xl font-black italic tracking-tighter">{resultado.resultado.tiempo_usuario}</p>
+                  <p className="text-[10px] text-neutral-500 font-black uppercase mb-1 tracking-widest">Tu Resultado</p>
+                  <p className="text-4xl font-black italic tracking-tighter">{resultado.resultado.tiempo_usuario}</p>
                 </div>
                 <div className="text-5xl font-black italic text-[#FFEB00] opacity-20 italic underline">VS</div>
                 <div className="text-center">
-                    <p className="text-[10px] text-neutral-500 font-black uppercase mb-1 tracking-widest">Rival</p>
-                    <p className="text-4xl font-black italic tracking-tighter text-neutral-400">{resultado.resultado.tiempo_rival}</p>
+                  <p className="text-[10px] text-neutral-500 font-black uppercase mb-1 tracking-widest">Rival</p>
+                  <p className="text-4xl font-black italic tracking-tighter text-neutral-400">{resultado.resultado.tiempo_rival}</p>
                 </div>
             </div>
           </div>
@@ -137,9 +137,9 @@ export default function DueloEscuderiasResultadoPage() {
 
       <section className="max-w-7xl mx-auto px-6 -mt-10 relative z-20 mt-8">
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <InfoBadge  label="Circuito" value={resultado.circuito.circuit_short_name} />
-            <InfoBadge  label="Modo" value={resultado.modo} />
-            <InfoBadge  label="Diferencia" value={resultado.resultado.diferencia} />
+          <InfoBadge  label="Circuito" value={resultado.circuito.circuit_short_name} />
+          <InfoBadge  label="Modo" value={resultado.modo} />
+          <InfoBadge  label="Diferencia" value={resultado.resultado.diferencia} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
@@ -172,8 +172,8 @@ function InfoBadge({ icon, label, value }) {
         <div className="flex items-center gap-3 bg-neutral-900 border border-white/5 px-6 py-3 rounded-full">
             <span className="text-[#FFEB00]">{icon}</span>
             <div className="flex flex-col">
-                <span className="text-[8px] text-neutral-500 font-black uppercase leading-none mb-1 tracking-tighter">{label}</span>
-                <span className="text-xs font-black uppercase italic leading-none">{value}</span>
+              <span className="text-[8px] text-neutral-500 font-black uppercase leading-none mb-1 tracking-tighter">{label}</span>
+              <span className="text-xs font-black uppercase italic leading-none">{value}</span>
             </div>
         </div>
     );

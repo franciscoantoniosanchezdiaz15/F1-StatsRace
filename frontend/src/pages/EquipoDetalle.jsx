@@ -145,9 +145,9 @@ export default function EquipoDetalle() {
                 <div className="mt-12 flex justify-between items-center opacity-30">
                   <p className="text-[9px] font-mono tracking-widest uppercase">Sistema: comprobado</p>
                   <div className="flex gap-2">
-                      <div className="h-1 w-1 bg-white rounded-full"></div>
-                      <div className="h-1 w-1 bg-white rounded-full"></div>
-                      <div className="h-1 w-1 bg-[#FFEB00] rounded-full"></div>
+                    <div className="h-1 w-1 bg-white rounded-full"></div>
+                    <div className="h-1 w-1 bg-white rounded-full"></div>
+                    <div className="h-1 w-1 bg-[#FFEB00] rounded-full"></div>
                   </div>
                 </div>
 

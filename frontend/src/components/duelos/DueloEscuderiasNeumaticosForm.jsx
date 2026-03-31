@@ -18,10 +18,15 @@ export default function DueloEscuderiasNeumaticosForm({
   const pilotos = useMemo(() => escuderiaUsuario?.pilotos || [], [escuderiaUsuario]);
 
   function handleChange(driverNumber, compuesto) {
-    setCompuestosUsuario((prev) => ({
-      ...prev,
-      [driverNumber]: compuesto,
-    }));
+    setCompuestosUsuario((prev) => {
+      // Creamos una copia del estado anterior
+      const nuevoEstado = { ...prev };
+      
+      // Asignamos el nuevo valor usando la clave dinámica
+      nuevoEstado[driverNumber] = compuesto;
+      
+      return nuevoEstado;
+    });
   }
 
   async function handleSubmit(e) {
@@ -178,7 +183,6 @@ export default function DueloEscuderiasNeumaticosForm({
                     </span>
                 )}
             </div>
-            {/* Efecto de brillo al pasar el ratón */}
             <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-40 group-hover:animate-shine" />
             </button>
             <p className="mt-4 text-neutral-600 font-mono text-[10px] uppercase tracking-widest">

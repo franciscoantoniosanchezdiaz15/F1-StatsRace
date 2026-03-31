@@ -136,7 +136,6 @@ function DueloCard({ duelo, onEliminar }) {
           <div className="hidden md:block">
             <p className="text-[10px] uppercase text-[#FFEB00] font-black mb-1 italic tracking-widest">Distancia</p>
             <p className="text-lg font-mono text-[#FFEB00]">
-              {/* Aquí se aplica la lógica que pediste */}
               {duelo.diferencia} 
               <span className="ml-1 text-[10px] font-bold uppercase">
                 {esCarrera ? "puntos" : "seg"}

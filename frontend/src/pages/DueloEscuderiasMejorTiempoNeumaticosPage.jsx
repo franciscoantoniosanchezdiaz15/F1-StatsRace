@@ -46,56 +46,56 @@ export default function DueloEscuderiasMejorTiempoNeumaticosPage() {
 
       <div className="w-full bg-neutral-900 border-b border-neutral-800">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-            <button
-                onClick={() => navigate("/duelos/escuderias/mejor-tiempo", { state: location.state })}
-                className="group flex items-center gap-2 text-neutral-400 hover:text-[#FFEB00] transition-colors"
-            >
-                <span className="text-[10px] font-black uppercase tracking-widest">Ajustes de Pista</span>
-            </button>
-            
-            <div className="flex gap-4 items-center">
-                <Step num="1" label="Config" done />
-                <div className="w-8 h-[2px] bg-[#FFEB00]"></div>
-                <Step num="2" label="Estrategia" active />
-                <div className="w-8 h-[2px] bg-neutral-800"></div>
-                <Step num="3" label="Carrera" />
-            </div>
+          <button
+            onClick={() => navigate("/duelos/escuderias/mejor-tiempo", { state: location.state })}
+            className="group flex items-center gap-2 text-neutral-400 hover:text-[#FFEB00] transition-colors"
+          >
+            <span className="text-[10px] font-black uppercase tracking-widest">Ajustes de Pista</span>
+          </button>
+          
+          <div className="flex gap-4 items-center">
+            <Step num="1" label="Config" done />
+            <div className="w-8 h-[2px] bg-[#FFEB00]"></div>
+            <Step num="2" label="Estrategia" active />
+            <div className="w-8 h-[2px] bg-neutral-800"></div>
+            <Step num="3" label="Carrera" />
+          </div>
         </div>
       </div>
 
       <main className="max-w-6xl mx-auto px-6 mt-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             
-            <aside className="lg:col-span-1 space-y-6">
-                <div className="bg-neutral-900 rounded-[32px] p-6 border border-neutral-800 overflow-hidden relative">
-                    <h4 className="text-[10px] font-black text-[#FFEB00] uppercase tracking-widest mb-4 flex items-center gap-2">
-                        Telemetria
-                    </h4>
-                    
-                    <ul className="space-y-4">
-                        <InfoRow label="Modo" value={configDuelo.modo === "carrera" ? "Full Race" : "Quick Lap"} />
-                        <InfoRow label="Circuito" value={configDuelo.circuito_key || "Aleatorio"} />
-                        <InfoRow label="Oponente" value={configDuelo.modo_rival === "manual" ? "Específico" : "Random"} />
-                    </ul>
-                </div>
+          <aside className="lg:col-span-1 space-y-6">
+            <div className="bg-neutral-900 rounded-[32px] p-6 border border-neutral-800 overflow-hidden relative">
+              <h4 className="text-[10px] font-black text-[#FFEB00] uppercase tracking-widest mb-4 flex items-center gap-2">
+                  Telemetria
+              </h4>
                 
-                <div className="p-6 rounded-[32px] bg-gradient-to-br from-neutral-800 to-neutral-900 border border-neutral-700">
-                    <p className="text-[10px] text-neutral-400 font-black uppercase tracking-widest mb-2 leading-tight">
-                        Aviso del Ingeniero:
-                    </p>
-                    <p className="text-xs italic text-neutral-300">
-                        "El compuesto elegido afectará al degradado y ritmo en las vueltas finales. Elige con sabiduría."
-                    </p>
-                </div>
-            </aside>
-
-            <div className="lg:col-span-3">
-                <DueloEscuderiasNeumaticosForm
-                    configDuelo={configDuelo}
-                    escuderiaUsuario={escuderiaUsuario}
-                    onSubmit={handleSubmit}
-                />
+              <ul className="space-y-4">
+                <InfoRow label="Modo" value={configDuelo.modo === "carrera" ? "Full Race" : "Quick Lap"} />
+                <InfoRow label="Circuito" value={configDuelo.circuito_key || "Aleatorio"} />
+                <InfoRow label="Oponente" value={configDuelo.modo_rival === "manual" ? "Específico" : "Random"} />
+              </ul>
             </div>
+            
+            <div className="p-6 rounded-[32px] bg-gradient-to-br from-neutral-800 to-neutral-900 border border-neutral-700">
+              <p className="text-[10px] text-neutral-400 font-black uppercase tracking-widest mb-2 leading-tight">
+                  Aviso del Ingeniero:
+              </p>
+              <p className="text-xs italic text-neutral-300">
+                  "El compuesto elegido afectará al degradado y ritmo en las vueltas finales. Elige con sabiduría."
+              </p>
+            </div>
+          </aside>
+
+          <div className="lg:col-span-3">
+            <DueloEscuderiasNeumaticosForm
+              configDuelo={configDuelo}
+              escuderiaUsuario={escuderiaUsuario}
+              onSubmit={handleSubmit}
+            />
+          </div>
         </div>
       </main>
     </div>
@@ -105,15 +105,15 @@ export default function DueloEscuderiasMejorTiempoNeumaticosPage() {
 function Step({ num, label, active, done }) {
     return (
         <div className="flex items-center gap-2">
-            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black 
-                ${active ? 'bg-[#FFEB00] text-black shadow-[0_0_15px_rgba(255,235,0,0.4)]' : 
-                  done ? 'bg-neutral-700 text-[#FFEB00]' : 'bg-neutral-800 text-neutral-600'}`}>
-                {num}
-            </div>
-            <span className={`text-[9px] font-black uppercase tracking-widest hidden sm:block
-                ${active ? 'text-white' : 'text-neutral-600'}`}>
-                {label}
-            </span>
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black 
+            ${active ? 'bg-[#FFEB00] text-black shadow-[0_0_15px_rgba(255,235,0,0.4)]' : 
+              done ? 'bg-neutral-700 text-[#FFEB00]' : 'bg-neutral-800 text-neutral-600'}`}>
+            {num}
+          </div>
+          <span className={`text-[9px] font-black uppercase tracking-widest hidden sm:block
+            ${active ? 'text-white' : 'text-neutral-600'}`}>
+            {label}
+          </span>
         </div>
     );
 }

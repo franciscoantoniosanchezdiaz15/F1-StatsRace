@@ -406,7 +406,11 @@ def eliminar_duelo_usuario(duelo_id: int, usuario_id: int):
     if not duelo:
         raise DueloNoEncontradoException()
 
-    autorizado = any(usuario.id == usuario_id for usuario in duelo.usuarios)
+    autorizado = False
+    for usuario in duelo.usuarios:
+        if usuario.id == usuario_id:
+            autorizado = True
+            break
     if not autorizado:
         raise DueloInvalidoException()
 
