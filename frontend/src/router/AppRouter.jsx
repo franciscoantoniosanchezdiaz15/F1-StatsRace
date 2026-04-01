@@ -22,6 +22,12 @@ import DueloEscuderiasResultadoPage from "../pages/DueloEscuderiasResultadoPage"
 import DueloEscuderiasHistorialPage from "../pages/DueloEscuderiasHistorialPage";
 import DueloEscuderiasCarreraNeumaticosPage from "../pages/DueloEscuderiasCarreraNeumaticosPage";
 import DueloEscuderiasMejorTiempoNeumaticosPage from "../pages/DueloEscuderiasMejorTiempoNeumaticosPage";
+import DueloPilotosCarreraPage from "../pages/DueloPilotosCarreraPage";
+import DueloPilotosMejorTiempoPage from "../pages/DueloPilotosMejorTiempoPage";
+import DueloPilotosResultadoPage from "../pages/DueloPilotosResultadoPage";
+import DueloPilotosHistorialPage from "../pages/DueloPilotosHistorialPage";
+import DueloPilotosCarreraNeumaticosPage from "../pages/DueloPilotosCarreraNeumaticosPage";
+import DueloPilotosMejorTiempoNeumaticosPage from "../pages/DueloPilotosMejorTiempoNeumaticosPage";
 
 
 export default function AppRouter() {
@@ -51,6 +57,12 @@ export default function AppRouter() {
       <Route path="/duelos/escuderias/historial" element={<DueloEscuderiasHistorialPage />} />
       <Route path="/duelos/escuderias/carrera/neumaticos" element={<DueloEscuderiasCarreraNeumaticosPage />} />
       <Route path="/duelos/escuderias/mejor-tiempo/neumaticos" element={<DueloEscuderiasMejorTiempoNeumaticosPage />} />
+      <Route path="/duelos/pilotos/carrera" element={<DueloPilotosCarreraPage />} />
+      <Route path="/duelos/pilotos/mejor-tiempo" element={<DueloPilotosMejorTiempoPage />} />
+      <Route path="/duelos/pilotos/resultado" element={<DueloPilotosResultadoPage />} />
+      <Route path="/duelos/pilotos/historial" element={<DueloPilotosHistorialPage />} />
+      <Route path="/duelos/pilotos/carrera/neumaticos" element={<DueloPilotosCarreraNeumaticosPage />} />
+      <Route path="/duelos/pilotos/mejor-tiempo/neumaticos" element={<DueloPilotosMejorTiempoNeumaticosPage />} />
     </Routes>
   );
 }

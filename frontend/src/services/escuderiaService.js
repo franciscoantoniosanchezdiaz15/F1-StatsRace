@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:5000/api/escuderias";
+import { API_BASE } from "../config";
+
+const API_URL = `${API_BASE}/api/escuderias`;
 
 export async function fetchPilotosDisponiblesEscuderia() {
   const response = await fetch(`${API_URL}/pilotos-disponibles`, {

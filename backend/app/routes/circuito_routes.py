@@ -82,3 +82,26 @@ def detalle_circuito(circuit_key):
                 "message": "Error obteniendo detalle del circuito"
             }
         }), 500
+
+
+@circuito_bp.route("/todos", methods=["GET"])
+def lista_todos_circuitos():
+    try:
+        circuitos = listar_circuitos_client()
+
+        return jsonify({
+            "ok": True,
+            "data": {
+                "circuitos": circuitos,
+                "year": 2023
+            }
+        }), 200
+
+    except Exception as e:
+        print(f"Error en /api/circuitos/todos: {e}")
+        return jsonify({
+            "ok": False,
+            "error": {
+                "message": "Error obteniendo todos los circuitos"
+            }
+        }), 500

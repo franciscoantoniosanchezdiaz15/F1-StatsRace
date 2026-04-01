@@ -14,3 +14,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
+
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SECURE = os.getenv(
+        "SESSION_COOKIE_SECURE", "False") == "True"
+    SESSION_COOKIE_SAMESITE = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")

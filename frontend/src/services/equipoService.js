@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:5000/api/equipos";
+import { API_BASE } from "../config";
+
+const API_URL = `${API_BASE}/api/equipos`;
 
 export async function fetchEquipos(page = 1) {
   const response = await fetch(`${API_URL}?page=${page}`, {

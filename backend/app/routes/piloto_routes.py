@@ -85,3 +85,26 @@ def detalle_piloto(driver_number):
                 "message": "Error obteniendo detalle del piloto"
             }
         }), 500
+
+
+@piloto_bp.route("/todos", methods=["GET"])
+def lista_todos_pilotos():
+    try:
+        pilotos = listar_pilotos_client()
+
+        return jsonify({
+            "ok": True,
+            "data": {
+                "pilotos": pilotos,
+                "year": 2023
+            }
+        }), 200
+
+    except Exception as e:
+        print(f"Error en /api/pilotos/todos: {e}")
+        return jsonify({
+            "ok": False,
+            "error": {
+                "message": "Error obteniendo todos los pilotos"
+            }
+        }), 500
