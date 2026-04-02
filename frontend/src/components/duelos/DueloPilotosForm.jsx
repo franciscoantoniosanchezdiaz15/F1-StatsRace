@@ -114,22 +114,18 @@ export default function DueloPilotosForm({ modo, onContinue }) {
         </div>
       </div>
 
-      {loading && (
+      {loading ? (
         <div className="flex flex-col items-center justify-center h-64">
           <div className="w-12 h-12 border-4 border-[#A6051A] border-t-transparent rounded-full animate-spin mb-4"></div>
           <p className="text-neutral-400 animate-pulse font-mono">
             Cargando formulario...
           </p>
         </div>
-      )}
-
-      {error && (
+      ) : error ? (
         <div className="bg-red-900/20 border border-red-500 p-6 rounded-xl text-center">
           <p className="text-red-400 font-bold uppercase">Error: {error}</p>
         </div>
-      )}
-
-      {!loading && pilotos.length === 0 && (
+      ) : pilotos.length === 0 ? (
         <div className="bg-neutral-900 rounded-[32px] p-12 border border-neutral-800 text-center shadow-2xl">
           <div className="text-6xl mb-6">🏎️</div>
           <h2 className="text-3xl font-black text-white uppercase italic mb-4">
@@ -147,9 +143,7 @@ export default function DueloPilotosForm({ modo, onContinue }) {
             Volver
           </button>
         </div>
-      )}
-
-      {!loading && pilotos.length > 0 && (
+      ) : (
         <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
