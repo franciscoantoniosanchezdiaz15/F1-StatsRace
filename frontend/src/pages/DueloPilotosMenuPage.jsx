@@ -2,9 +2,13 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import bgTiempo from "../assets/tiempo.png";
 import bgCarrera from "../assets/carrera.png";
+import { useRequireAuth } from "../hooks/useRequireAuth";
 
 export default function DueloPilotosMenuPage() {
   const navigate = useNavigate();
+  const { loading, isAuthenticated } = useRequireAuth();
+  
+  if (loading || !isAuthenticated) return null;
 
   return (
      <div className="min-h-screen bg-black">

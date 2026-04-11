@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import DueloEscuderiasForm from "../components/duelos/DueloEscuderiasForm";
+import { useRequireAuth } from "../hooks/useRequireAuth";
 
 export default function DueloEscuderiasMejorTiempoPage() {
   const navigate = useNavigate();
+  const { loading, isAuthenticated } = useRequireAuth();
 
   async function handleContinue(payload, escuderias) {
      const escuderiaUsuario = escuderias.find( (escuderia) => escuderia.id === payload.escuderia_id_1);
@@ -15,6 +17,8 @@ export default function DueloEscuderiasMejorTiempoPage() {
       }})
   }
 
+  if (loading || !isAuthenticated) return null;
+  
   return (
     <div>
       <Navbar />

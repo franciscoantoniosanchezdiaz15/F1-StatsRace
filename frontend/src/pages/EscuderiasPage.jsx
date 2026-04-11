@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import { fetchMisEscuderias, eliminarEscuderia } from "../services/escuderiaService";
+import { useRequireAuth } from "../hooks/useRequireAuth";
 
 export default function EscuderiasPage() {
   const navigate = useNavigate();
+  const { loading: loadingAuth, isAuthenticated } = useRequireAuth();
 
   const [escuderias, setEscuderias] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [loadingData, setLoadingData] = useState(true);
 
   async function cargarEscuderias() {
     try {
-      setLoading(true);
+      setLoadingData(true);
       setError("");
 
       const data = await fetchMisEscuderias();
@@ -20,7 +22,7 @@ export default function EscuderiasPage() {
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false);
+      setLoadingData(false);
     }
   }
 
@@ -36,6 +38,8 @@ export default function EscuderiasPage() {
       setError(err.message);
     }
   }
+
+  if (loadingAuth || !isAuthenticated) return null;
 
   return (
     <div>
@@ -73,7 +77,7 @@ export default function EscuderiasPage() {
 
         </div>
 
-        {loading && (
+        {loadingData && (
           <div className="flex flex-col items-center justify-center h-64">
             <div className="w-12 h-12 border-4 border-[#A6051A] border-t-transparent rounded-full animate-spin mb-4"></div>
             <p className="text-neutral-400 animate-pulse font-mono">Cargando circuito...</p>
@@ -86,13 +90,13 @@ export default function EscuderiasPage() {
           </div>
         )}
 
-        {!loading && !error && escuderias.length === 0 && (
+        {!loadingData && !error && escuderias.length === 0 && (
           <div className="text-center py-20 bg-neutral-900/20 border border-white/5 rounded-3xl">
             <p className="text-neutral-500 font-black italic uppercase text-2xl tracking-tighter">No hay unidades registradas</p>
           </div>
         )}
 
-        {!loading && !error && escuderias.length > 0 && (
+        {!loadingData && !error && escuderias.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {escuderias.map((escuderia) => (
               <article

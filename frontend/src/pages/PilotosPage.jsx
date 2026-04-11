@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import { fetchPilotos } from "../services/pilotoService";
-import Daniel from "../assets/Daniel_Ricciardo.png";
+import { getBandera } from "../utils/getBandera";
+import { getPilotos } from "../utils/getPiloto";
 
 export default function PilotosPage() {
   const navigate = useNavigate()
@@ -94,9 +95,9 @@ export default function PilotosPage() {
                     <span className="absolute top-4 right-4 text-7xl font-black italic text-white/[0.03] group-hover:text-white/[0.07] transition-colors duration-500">
                       {piloto.driver_number}
                     </span>
-                    
+                    {console.log(piloto.full_name)}
                     <img
-                      src={piloto.headshot_url || Daniel}
+                      src={getPilotos(piloto.full_name)}
                       alt={piloto.full_name}
                       className="relative z-10 w-full h-full object-contain transform transition-transform duration-500 group-hover:scale-110"
                     />
@@ -124,8 +125,11 @@ export default function PilotosPage() {
                     
                     <div className="mt-4 flex items-center justify-between border-t border-neutral-800 pt-4">
                       <div className="flex items-center gap-2">
-                         <span className="text-xs font-bold text-neutral-500">PAÍS:</span>
-                         <span className="text-xs font-black uppercase">{piloto.country_code}</span>
+                        <span className="text-xs font-bold text-neutral-500">PAÍS:</span>
+                        <span className="text-xs font-black uppercase">{piloto.country_code}</span>
+                        <span className="h-6 w-6 rounded-full bg-neutral-900 flex items-center justify-center">
+                          <img src={getBandera(piloto.country_code)} alt={piloto.country_code} className="object-cover" />
+                        </span>
                       </div>
                       <div className="h-6 w-6 rounded-full bg-neutral-800 flex items-center justify-center group-hover:bg-[#FFEB00] transition-colors">
                          <span className="text-black text-xs font-bold opacity-0 group-hover:opacity-100">→</span>

@@ -96,6 +96,17 @@ export default function Login() {
               </button>
             </form>
 
+            <div className="mt-8 flex flex-col items-center gap-4 border-t border-white/5 pt-8">
+              <p className="text-neutral-500 text-[10px] font-black uppercase tracking-widest">
+                ¿No eres parte de la parrilla?
+              </p>
+              <button 
+                onClick={() => navigate("/register")} 
+                className="text-white hover:text-[#A6051A] font-black uppercase italic tracking-tighter border-b border-white/10 hover:border-[#A6051A] transition-all pb-1"
+              >
+                Unete aquí
+              </button>
+            </div>
           </div>
         </div>
 

@@ -6,13 +6,13 @@ function Hero() {
   const navigate = useNavigate();
  
   return (
-    <section className="max-w-7xl mx-auto px-6 py-20 relative md:py-32 grid grid-cols-1 lg:grid-cols-2 items-center">
+    <section className="max-w-7xl mx-auto px-6 py-2 relative grid grid-cols-1 lg:grid-cols-2 items-center">
       
       <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
         
         <div className="text-left z-10">
 
-          <h2 className="text-6xl md:text-7xl font-black leading-[0.9] italic uppercase tracking-tighter text-white">
+          <h2 className="text-6xl md:text-5xl font-black leading-[0.9] italic uppercase tracking-tighter text-white">
             Analiza <span className="text-[#A6051A]">Pilotos</span> <br /> 
             & Simula <span className="text-[#FFEB00]">Duelos</span>
           </h2>

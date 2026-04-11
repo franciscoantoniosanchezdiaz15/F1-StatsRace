@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import DueloPilotosForm from "../components/duelos/DueloPilotosForm";
+import { useRequireAuth } from "../hooks/useRequireAuth";
 
 export default function DueloPilotosMejorTiempoPage() {
   const navigate = useNavigate();
-
+  const { loading, isAuthenticated } = useRequireAuth();
+    
   async function handleContinue(payload, pilotos) {
     const pilotoUsuario = pilotos.find(
       (piloto) => piloto.driver_number === payload.driver_number_1
@@ -17,6 +19,8 @@ export default function DueloPilotosMejorTiempoPage() {
       },
     });
   }
+
+  if (loading || !isAuthenticated) return null;
 
   return (
     <div>

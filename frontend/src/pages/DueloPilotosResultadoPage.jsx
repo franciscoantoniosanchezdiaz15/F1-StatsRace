@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
+import { useRequireAuth } from "../hooks/useRequireAuth";
 
 function renderEstadoCarrera(piloto) {
   if (!piloto.valido) {
@@ -93,6 +94,7 @@ function PilotoDetalleCard({ piloto, esCarrera, esUsuario }) {
 export default function DueloPilotosResultadoPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { loading, isAuthenticated } = useRequireAuth();
 
   const resultado = location.state?.resultado;
 
@@ -119,6 +121,8 @@ export default function DueloPilotosResultadoPage() {
 
   const esCarrera = resultado.modo === "carrera";
   const ganoUsuario = resultado.resultado.ganador === resultado.piloto_1.full_name;
+
+  if (loading || !isAuthenticated) return null;
 
   return (
     <div>

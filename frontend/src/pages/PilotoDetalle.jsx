@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import { fetchPilotoDetalle } from "../services/pilotoService";
-import Daniel from "../assets/Daniel_Ricciardo.png";
 import { getBandera } from "../utils/getBandera";
+import { getPilotos } from "../utils/getPiloto";
 
 export default function PilotoDetalle() {
   const { driver_number } = useParams();
@@ -70,7 +70,7 @@ export default function PilotoDetalle() {
               </div>
 
               <img
-                src={piloto.headshot_url || Daniel}
+                src={getPilotos(piloto.full_name)}
                 alt={piloto.full_name}
                 className="w-full h-[300px] object-contain drop-shadow-[0_20px_20px_rgba(0,0,0,0.5)]"
               />

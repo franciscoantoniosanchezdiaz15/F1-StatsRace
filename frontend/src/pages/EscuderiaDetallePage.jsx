@@ -2,19 +2,21 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import { fetchEscuderiaDetalle } from "../services/escuderiaService";
+import { useRequireAuth } from "../hooks/useRequireAuth";
 
 export default function EscuderiaDetallePage() {
   const { escuderia_id } = useParams();
   const navigate = useNavigate();
+  const { loading: loadingAuth, isAuthenticated } = useRequireAuth();
 
   const [escuderia, setEscuderia] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingData, setLoadingData] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     async function cargarDetalle() {
       try {
-        setLoading(true);
+        setLoadingData(true);
         setError("");
 
         const data = await fetchEscuderiaDetalle(escuderia_id);
@@ -22,12 +24,14 @@ export default function EscuderiaDetallePage() {
       } catch (err) {
         setError(err.message);
       } finally {
-        setLoading(false);
+        setLoadingData(false);
       }
     }
 
     cargarDetalle();
   }, [escuderia_id]);
+
+  if (loadingAuth || !isAuthenticated) return null;
 
   return (
     <div>
@@ -40,7 +44,7 @@ export default function EscuderiaDetallePage() {
           <span className="group-hover:-translate-x-1 transition-transform">←</span> Anterior
         </button>
 
-        {loading && (
+        {loadingData && (
           <div className="flex flex-col items-center justify-center h-64">
             <div className="w-12 h-12 border-4 border-[#A6051A] border-t-transparent rounded-full animate-spin mb-4"></div>
             <p className="text-neutral-400 animate-pulse font-mono">Cargando circuito...</p>
@@ -53,7 +57,7 @@ export default function EscuderiaDetallePage() {
           </div>
         )}
 
-        {!loading && !error && escuderia && (
+        {!loadingData && !error && escuderia && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 mt-10">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
               <div>

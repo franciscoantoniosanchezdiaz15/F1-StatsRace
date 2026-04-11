@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/home/Navbar";
 import { fetchEquipoDetalle } from "../services/equipoService";
 import { getEquipo } from "../utils/getEquipo";
-import Daniel from "../assets/Daniel_Ricciardo.png";
+import { getPilotos } from "../utils/getPiloto";
 
 export default function EquipoDetalle() {
 
@@ -120,7 +120,7 @@ export default function EquipoDetalle() {
                           
                           <div className="w-25 h-25 bg-neutral-900 rounded-lg overflow-hidden flex-shrink-0">
                             <img
-                              src={piloto.headshot_url || Daniel}
+                              src={getPilotos(piloto.full_name)}
                               alt={piloto.full_name}
                               className="z-10 group-hover/item:scale-110 transition-transform"
                             /> 
