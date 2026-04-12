@@ -3,7 +3,7 @@ const pilotos = import.meta.glob("../assets/pilotos/*.png", {
 });
 
 export function getPilotos(full_name) {
-  console.log(full_name)
+
   if (!full_name) return null;
 
   const key = `../assets/pilotos/${full_name}.png`;

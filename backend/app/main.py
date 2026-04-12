@@ -5,6 +5,7 @@ from app.routes.equipo_routes import equipo_bp
 from app.routes.circuito_routes import circuito_bp
 from app.routes.piloto_routes import piloto_bp
 from app.routes.auth_routes import auth_bp
+from app.routes.ai_routes import ai_bp
 from app.models.piloto_escuderia import PilotoEscuderia
 from app.models.participar import Participar
 from app.models.duelo_escuderia import DueloEscuderia
@@ -147,6 +148,7 @@ app.register_blueprint(equipo_bp)
 app.register_blueprint(escuderia_bp)
 app.register_blueprint(duelo_escuderia_bp)
 app.register_blueprint(duelo_piloto_bp)
+app.register_blueprint(ai_bp)
 
 
 @app.route("/")

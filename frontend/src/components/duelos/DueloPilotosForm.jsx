@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import circuitosFoto from "../../assets/circuitos_foto.png";
 import usuario from "../../assets/usuario.png";
 import rival from "../../assets/rivales.png";
+import { fetchRecomendacionRival } from "../../services/iaService";
 
 export default function DueloPilotosForm({ modo, onContinue }) {
   const navigate = useNavigate();
@@ -21,6 +22,12 @@ export default function DueloPilotosForm({ modo, onContinue }) {
   const [loading, setLoading] = useState(true);
   const [errorCarga, setErrorCarga] = useState("");
   const [errorForm, setErrorForm] = useState("");
+
+  const [recomendacionIA, setRecomendacionIA] = useState(null);
+  const [loadingIA, setLoadingIA] = useState(false);
+  const [errorIA, setErrorIA] = useState("");
+
+  const [modalIAAbierto, setModalIAAbierto] = useState(false);
 
   useEffect(() => {
     async function cargarDatos() {
@@ -40,6 +47,47 @@ export default function DueloPilotosForm({ modo, onContinue }) {
 
     cargarDatos();
   }, []);
+
+  useEffect(() => {
+    async function cargarRecomendacionIA() {
+      if (
+        modoCircuito !== "manual" ||
+        !circuitoKey ||
+        !driverNumber1
+      ) {
+        setRecomendacionIA(null);
+        setErrorIA("");
+        return;
+      }
+
+      try {
+        setLoadingIA(true);
+        setErrorIA("");
+
+        const data = await fetchRecomendacionRival(
+          Number(circuitoKey),
+          Number(driverNumber1)
+        );
+
+        setRecomendacionIA(data);
+        setModalIAAbierto(true);
+
+      } catch (err) {
+        setRecomendacionIA(null);
+        setErrorIA(err.message);
+      } finally {
+        setLoadingIA(false);
+      }
+    }
+
+    cargarRecomendacionIA();
+  }, [circuitoKey, driverNumber1, modoCircuito]);
+
+  useEffect(() => {
+    if (modoRival === "aleatorio") {
+      setDriverNumber2("");
+    }
+  }, [modoRival]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -93,6 +141,91 @@ export default function DueloPilotosForm({ modo, onContinue }) {
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-12 animate-fade-in">
+      {modalIAAbierto && recomendacionIA?.rival_recomendado && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          onClick={() => setModalIAAbierto(false)}
+        >
+          <div
+            className="relative bg-neutral-950 border border-[#FFEB00]/30 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setModalIAAbierto(false)}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-neutral-500 hover:text-white transition-colors text-lg"
+            >
+              ✕
+            </button>
+
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-full bg-[#FFEB00] flex items-center justify-center">
+                <span className="text-black font-black text-lg">🧠</span>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.25em] text-[#FFEB00] font-black">
+                  Team Radio
+                </p>
+                <h2 className="text-xl font-bold text-white">
+                  Tu equipo quiere echarte una mano
+                </h2>
+              </div>
+            </div>
+
+            <p className="text-neutral-300 text-sm leading-relaxed mb-5">
+              Hemos analizado el circuito y creemos que este rival puede darte un duelo
+              más interesante y competitivo.
+            </p>
+
+            <div className="bg-black/60 border border-white/10 rounded-2xl p-5 mb-5">
+              <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-black mb-2">
+                Rival recomendado
+              </p>
+
+              <h3 className="text-white text-2xl font-black italic">
+                {recomendacionIA.rival_recomendado.full_name}
+              </h3>
+
+              <p className="text-neutral-400 text-sm mt-1">
+                {recomendacionIA.rival_recomendado.team_name}
+              </p>
+
+              <p className="text-neutral-300 text-sm mt-4 leading-relaxed">
+                {recomendacionIA.rival_recomendado.motivo}
+              </p>
+
+              <p className="mt-4 text-xs uppercase font-black tracking-widest text-[#FFEB00]">
+                Nivel del duelo: {recomendacionIA.rival_recomendado.nivel_duelo}
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  if (recomendacionIA?.rival_recomendado?.driver_number) {
+                    setModoRival("manual");
+                    setDriverNumber2(
+                      String(recomendacionIA.rival_recomendado.driver_number)
+                    );
+                  }
+                  setModalIAAbierto(false);
+                }}
+                className="flex-1 py-3 bg-[#FFEB00] text-black font-black uppercase text-xs tracking-widest rounded-full hover:bg-white transition-colors"
+              >
+                Aceptar rival
+              </button>
+
+              <button
+                onClick={() => setModalIAAbierto(false)}
+                className="flex-1 py-3 bg-neutral-900 border border-white/10 text-white font-black uppercase text-xs tracking-widest rounded-full hover:bg-neutral-800 transition-colors"
+              >
+                Lo elijo yo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      
       <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
         <div>
           <span className="text-[#FFEB00] font-mono text-sm tracking-[0.3em] uppercase">
@@ -246,6 +379,42 @@ export default function DueloPilotosForm({ modo, onContinue }) {
                           </option>
                         ))}
                       </select>
+
+                      {loadingIA && (
+                        <div className="mt-4 bg-black border border-neutral-800 rounded-2xl p-4">
+                          <p className="text-sm text-neutral-400 font-mono">
+                            Analizando circuito y piloto con IA...
+                          </p>
+                        </div>
+                      )}
+
+                      {errorIA && (
+                        <div className="mt-4 bg-red-900/20 border border-red-500 rounded-2xl p-4">
+                          <p className="text-sm text-red-400 font-bold">
+                            {errorIA}
+                          </p>
+                        </div>
+                      )}
+
+                      {recomendacionIA?.rival_recomendado && (
+                        <div className="mt-4 bg-neutral-950 border border-[#FFEB00]/30 rounded-2xl p-5 shadow-[0_0_25px_rgba(255,235,0,0.08)]">
+                          <p className="text-[10px] uppercase font-black tracking-widest text-[#FFEB00] mb-2">
+                            Recomendación IA
+                          </p>
+                          <h4 className="text-white font-black text-lg italic">
+                            {recomendacionIA.rival_recomendado.full_name}
+                          </h4>
+                          <p className="text-neutral-400 text-sm mt-1">
+                            {recomendacionIA.rival_recomendado.team_name}
+                          </p>
+                          <p className="text-neutral-300 text-sm mt-3 leading-relaxed">
+                            {recomendacionIA.rival_recomendado.motivo}
+                          </p>
+                          <p className="text-xs text-neutral-500 mt-3 uppercase">
+                            Nivel del duelo: {recomendacionIA.rival_recomendado.nivel_duelo}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
 

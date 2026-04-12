@@ -19,3 +19,8 @@ class Config:
     SESSION_COOKIE_SECURE = os.getenv(
         "SESSION_COOKIE_SECURE", "False") == "True"
     SESSION_COOKIE_SAMESITE = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")
+
+    FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+    GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")

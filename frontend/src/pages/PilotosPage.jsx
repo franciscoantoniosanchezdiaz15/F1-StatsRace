@@ -95,7 +95,7 @@ export default function PilotosPage() {
                     <span className="absolute top-4 right-4 text-7xl font-black italic text-white/[0.03] group-hover:text-white/[0.07] transition-colors duration-500">
                       {piloto.driver_number}
                     </span>
-                    {console.log(piloto.full_name)}
+                   
                     <img
                       src={getPilotos(piloto.full_name)}
                       alt={piloto.full_name}

@@ -230,8 +230,6 @@ def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_us
             except (Exception):
                 puntos = 0.0
 
-        print(compuestos_usuario)
-        print(type(compuestos_usuario.get(piloto.driver_number)))
         compuesto_elegido = compuestos_usuario.get(str(piloto.driver_number))
 
         info_compuesto = resolver_compuesto_piloto(
