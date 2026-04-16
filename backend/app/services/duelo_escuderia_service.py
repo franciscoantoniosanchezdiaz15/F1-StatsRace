@@ -72,7 +72,7 @@ def calcular_quimica_escuderia(escuderia):
     puntos_base_bonus = 30 - diferencia
     puntos_ajustados = max(0, puntos_base_bonus)
 
-    bonus_equilibrado = puntos_ajustados * 0.3
+    bonus_equilibrado = puntos_ajustados * 0.5
 
     return bonus_equilibrado
 
@@ -258,7 +258,7 @@ def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_us
     for p in pilotos_detalle:
         total_sin_bonus += p["valor"]
 
-    valor_final = total_sin_bonus + bonus_quimica
+    valor_final = total_sin_bonus + bonus_quimica + 20
 
     return {
         "id": escuderia.id,
@@ -331,7 +331,7 @@ def obtener_mejor_vuelta_piloto_con_detalle(session_key: int, piloto, compuestos
         datos_piloto["valor"] = round(valor_fianl_piloto, 3)
         datos_piloto["valido"] = True
     else:
-        valor_fianl_piloto = mejor_vuelta + info_compuesto["bonus_compuesto"]
+        valor_fianl_piloto = info_compuesto["bonus_compuesto"]
         datos_piloto["valor"] = None
         datos_piloto["valido"] = False
 
@@ -360,6 +360,9 @@ def obtener_detalle_mejor_tiempo_escuderia(session_key: int, escuderia, compuest
         if p["valor"] is not None:
             vueltas_validas.append(p["valor"])
         bonus_quimica = float(calcular_quimica_escuderia(escuderia))
+
+    if len(vueltas_validas) != 2:
+        raise DueloInvalidoException()
 
     if vueltas_validas:
         mejor_base = sum(vueltas_validas)
@@ -419,6 +422,25 @@ def calcular_resultado_duelo(escuderia_usuario, escuderia_rival, circuito_key: i
         }
 
     raise DueloInvalidoException()
+
+
+def crear_resumen_bonificaciones(detalle_escuderia: dict) -> dict:
+    pilotos_bonus = []
+
+    for piloto in detalle_escuderia.get("pilotos"):
+        pilotos_bonus.append({
+            "driver_number": piloto.get("driver_number"),
+            "full_name": piloto.get("full_name"),
+            "compuesto_elegido": piloto.get("compuesto_elegido"),
+            "compuesto_real": piloto.get("compuesto_real"),
+            "acierto_compuesto": piloto.get("acierto_compuesto"),
+            "bonus_compuesto": piloto.get("bonus_compuesto"),
+        })
+
+    return {
+        "bonus_quimica": detalle_escuderia.get("bonus_quimica"),
+        "pilotos": pilotos_bonus,
+    }
 
 
 def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_circuito: str, escuderia_id_1: int, escuderia_id_2: int | None = None, circuito_key: int | None = None, compuestos_usuario=None):
@@ -492,6 +514,7 @@ def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_c
             "tiempo_usuario": valor_usuario,
             "tiempo_rival": valor_rival,
             "diferencia": diferencia,
+            "bonificaciones_usuario": crear_resumen_bonificaciones(detalle_usuario)
         },
         "duelo_guardado": crear_duelo_escuderia_resumen(duelo),
     }

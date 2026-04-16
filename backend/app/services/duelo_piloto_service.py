@@ -179,7 +179,7 @@ def obtener_detalle_carrera_piloto(session_key: int, piloto_data: dict, compuest
     valor_final = puntos + info_compuesto["bonus_compuesto"]
 
     datos_piloto = crear_piloto_resumen_base(piloto_data)
-    datos_piloto["valor"] = round(valor_final, 3)
+    datos_piloto["valor"] = round(valor_final + 10, 3)
     datos_piloto["valido"] = valido
     datos_piloto["bonus_compuesto"] = info_compuesto["bonus_compuesto"]
     datos_piloto["compuesto_elegido"] = info_compuesto["compuesto_elegido"]

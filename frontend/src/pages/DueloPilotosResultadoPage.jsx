@@ -9,6 +9,81 @@ function renderEstadoCarrera(piloto) {
   return `P${piloto.position}`;
 }
 
+function getCompuestoColor(compuesto) {
+  const c = (compuesto || "").toUpperCase();
+  if (c === "SOFT") return "bg-red-500 text-white";
+  if (c === "MEDIUM") return "bg-yellow-400 text-black";
+  return "bg-white text-black";
+}
+
+function CompuestoBadge({ compuesto }) {
+  if (!compuesto) return <span className="text-neutral-600 text-[10px] font-black uppercase">NF</span>;
+  return (
+    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${getCompuestoColor(compuesto)}`}>
+      {compuesto}
+    </span>
+  );
+}
+
+function getBonusDisplayValue(valor, esCarrera, aciertoCompuesto = null) {
+  const n = Math.abs(Number(valor || 0));
+
+  if (esCarrera) {
+    return Number(valor || 0);
+  }
+
+  // mejor-tiempo:
+  // si acierta => reduce tiempo => mostrar negativo
+  // si falla => penaliza => mostrar positivo
+  if (aciertoCompuesto === true) return -n;
+  if (aciertoCompuesto === false) return n;
+
+  return -n;
+}
+
+function formatBonus(valor, esCarrera, aciertoCompuesto = null) {
+  const display = getBonusDisplayValue(valor, esCarrera, aciertoCompuesto);
+
+  if (display > 0) return `+${display}`;
+  if (display < 0) return `${display}`;
+  return "0";
+}
+
+function getBonusColor(valor, esCarrera, aciertoCompuesto = null) {
+  if (esCarrera) {
+    const n = Number(valor || 0);
+    if (n > 0) return "text-green-400";
+    if (n < 0) return "text-red-400";
+    return "text-neutral-500";
+  }
+
+  // mejor-tiempo:
+  // acierto => verde
+  // fallo => rojo
+  if (aciertoCompuesto === true) return "text-green-400";
+  if (aciertoCompuesto === false) return "text-red-400";
+ 
+  const n = Number(valor || 0);
+  return n !== 0 ? "text-green-400" : "text-neutral-500"; 
+}
+
+function getTotalBonusColor(valor, esCarrera) {
+  const n = Number(valor || 0);
+
+  if (esCarrera) {
+    if (n > 0) return "text-green-400";
+    if (n < 0) return "text-red-400";
+    return "text-neutral-500";
+  }
+
+  // mejor-tiempo:
+  // negativo = beneficio
+  // positivo = penalización
+  if (n < 0) return "text-green-400";
+  if (n > 0) return "text-red-400";
+  return "text-neutral-500";
+}
+
 function PilotoDetalleCard({ piloto, esCarrera, esUsuario }) {
   return (
     <div className={`relative overflow-hidden rounded-3xl border ${esUsuario ? "border-[#FFEB00]/30 bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"} p-6 shadow-2xl`}>
@@ -52,9 +127,8 @@ function PilotoDetalleCard({ piloto, esCarrera, esUsuario }) {
             </div>
 
             <div className="text-right">
-              <p className={`text-xl font-black italic ${ piloto.valido ? "text-white" : "text-red-500"}`}>
-                {esCarrera ? renderEstadoCarrera(piloto) : piloto.valor ?? "---"}
-              </p>
+              <p className={`text-xl font-black italic ${piloto.valido ? 'text-white' : 'text-red-500'}`}>
+                {esCarrera ? renderEstadoCarrera(piloto) : (piloto.valor)}</p>
               <p className="text-[9px] text-neutral-500 font-bold uppercase">
                 {esCarrera ? "Posición" : "Mejor Vuelta"}
               </p>
@@ -63,16 +137,28 @@ function PilotoDetalleCard({ piloto, esCarrera, esUsuario }) {
 
           {esUsuario && (
             <div className="mt-3 pt-3 border-t border-neutral-700 grid grid-cols-2 gap-2">
-              <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${ piloto.acierto_compuesto ? "bg-green-500" : "bg-red-500"}`}></div>
-                <span className="text-[10px] font-bold text-neutral-400 uppercase">
-                  Elección
-                </span>
-              </div>
-              <div className="text-right">
-                <span className="text-[10px] font-black text-white px-2 py-0.5 bg-black rounded uppercase tracking-tighter">
-                  {piloto.compuesto_elegido}
-                </span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[9px] text-neutral-500 font-black uppercase tracking-widest">Elegido</span>
+                    <CompuestoBadge compuesto={piloto.compuesto_elegido} />
+                  </div>
+                  <span className="text-neutral-600 text-xs">→</span>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[9px] text-neutral-500 font-black uppercase tracking-widest">Real</span>
+                    <CompuestoBadge compuesto={piloto.compuesto_real} />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${piloto.acierto_compuesto ? "bg-green-500" : "bg-red-500"}`} />
+                  <span className={`text-xs font-black tabular-nums ${getBonusColor(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto)}`}>
+                    {formatBonus(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto)}
+                  </span>
+                  <span className="text-[9px] text-neutral-600 font-black uppercase">
+                    {esCarrera ? "pts" : "s"}
+                  </span>
+                </div>
               </div>
             </div>
           )}
@@ -86,6 +172,52 @@ function PilotoDetalleCard({ piloto, esCarrera, esUsuario }) {
         <p className="text-3xl font-black italic text-black tracking-tighter uppercase">
           {piloto.valor}
         </p>
+      </div>
+    </div>
+  );
+}
+
+
+function BonificacionesPanel({ piloto, esCarrera }) {
+  if (!piloto) return null;
+
+  const bonusDisplay = getBonusDisplayValue(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto);
+  const unidad = esCarrera ? "pts" : "s";
+
+  return (
+    <div className="max-w-2xl mx-auto mb-12 rounded-3xl border border-[#FFEB00]/20 bg-neutral-900 p-6 shadow-xl">
+      <h3 className="text-xs font-black text-[#FFEB00] uppercase tracking-[0.4em] mb-5 flex items-center gap-2">
+        <span className="w-1.5 h-4 bg-[#FFEB00] rounded-full inline-block" />
+        Resumen de Bonificaciones
+      </h3>
+
+      <div className="space-y-3 mb-5">
+        <div className="flex items-center justify-between bg-black/30 px-4 py-3 rounded-2xl border border-neutral-800">
+          <div className="flex items-center gap-3">
+            <div className={`w-2 h-2 rounded-full ${piloto.acierto_compuesto ? "bg-green-500" : "bg-red-400"}`} />
+            <div>
+              <p className="text-white text-xs font-black uppercase tracking-tight">{piloto.full_name}</p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <CompuestoBadge compuesto={piloto.compuesto_elegido} />
+                <span className="text-neutral-600 text-[10px]">→</span>
+                <CompuestoBadge compuesto={piloto.compuesto_real} />
+                <span className={`text-[9px] font-black uppercase ml-1 ${piloto.acierto_compuesto ? "text-green-500" : "text-red-400"}`}>
+                  {piloto.acierto_compuesto ? "Acierto" : "Fallo"}
+                </span>
+              </div>
+            </div>
+          </div>
+          <span className={`text-sm font-black tabular-nums ${getBonusColor(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto)}`}>
+            {formatBonus(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto)} {unidad}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-neutral-800 pt-4">
+        <p className="text-xs font-black text-neutral-400 uppercase tracking-widest">Total bonificado</p>
+        <span className={`text-xl font-black tabular-nums ${getTotalBonusColor(parseFloat(bonusDisplay.toFixed(3)), esCarrera)}`}>
+          {bonusDisplay > 0 ? "+" : ""}{parseFloat(bonusDisplay.toFixed(3))} {unidad}
+        </span>
       </div>
     </div>
   );
@@ -181,6 +313,8 @@ export default function DueloPilotosResultadoPage() {
           <PilotoDetalleCard piloto={resultado.piloto_1} esCarrera={esCarrera} esUsuario={true} />
           <PilotoDetalleCard piloto={resultado.piloto_2} esCarrera={esCarrera} esUsuario={false} />
         </div>
+
+        <BonificacionesPanel piloto={resultado.piloto_1} esCarrera={esCarrera} />
 
         <div className="flex flex-col md:flex-row justify-center gap-4">
           <button
