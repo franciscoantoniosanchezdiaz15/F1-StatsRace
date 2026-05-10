@@ -13,4 +13,6 @@ EXPOSE 5000
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
+ENV FLASK_APP=app.main:app
+
 CMD ["./entrypoint.sh"]

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+export FLASK_APP=app.main:app
+
 echo "Aplicando migraciones..."
 flask db upgrade
 
