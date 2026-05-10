@@ -37,7 +37,7 @@ def calcular_bonus_paradas(paradas_elegidas, paradas_reales, modo: str):
     paradas_elegidas = normalizar_paradas(paradas_elegidas)
 
     if paradas_elegidas is None or paradas_reales is None:
-        return 0, False
+        return 0, None
 
     acierto = paradas_elegidas == paradas_reales
 

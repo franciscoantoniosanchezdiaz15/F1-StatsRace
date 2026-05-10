@@ -443,7 +443,7 @@ def calcular_resultado_duelo(escuderia_usuario, escuderia_rival, circuito_key: i
 def crear_resumen_bonificaciones(detalle_escuderia: dict) -> dict:
     pilotos_bonus = []
 
-    for piloto in detalle_escuderia.get("pilotos"):
+    for piloto in detalle_escuderia.get("pilotos", []):
         pilotos_bonus.append({
             "driver_number": piloto.get("driver_number"),
             "full_name": piloto.get("full_name"),

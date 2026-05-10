@@ -41,6 +41,7 @@ def test_duelo_escuderias():
     duelo_guardado_mock.usuario_id = 1
 
     compuestos = {"1": "SOFT", "2": "MEDIUM"}
+    paradas = {"1": 2, "11": 1}
 
     with patch("app.services.duelo_escuderia_service.obtener_escuderia_por_id", return_value=escuderia_usuario), \
             patch("app.services.duelo_escuderia_service.seleccionar_rival", return_value=escuderia_rival), \
@@ -56,7 +57,8 @@ def test_duelo_escuderias():
             escuderia_id_1=1,
             escuderia_id_2=2,
             circuito_key=10,
-            compuestos_usuario=compuestos
+            compuestos_usuario=compuestos,
+            paradas_usuario=paradas
         )
 
         # comprobar ganador
