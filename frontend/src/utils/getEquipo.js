@@ -7,5 +7,11 @@ export function getEquipo(team_name) {
 
   const key = `../assets/logos_equipos/${team_name}.png`;
 
-  return equipos[key].default;
+  const imagen = equipos[key];
+
+  if (!imagen) {
+    return null;
+  }
+
+  return imagen.default;
 }
