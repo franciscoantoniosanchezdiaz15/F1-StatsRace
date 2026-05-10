@@ -29,7 +29,8 @@ def duelo_carrera():
             escuderia_id_1=data.get("escuderia_id_1"),
             escuderia_id_2=data.get("escuderia_id_2"),
             circuito_key=data.get("circuito_key"),
-            compuestos_usuario=data.get("compuestos_usuario")
+            compuestos_usuario=data.get("compuestos_usuario"),
+            paradas_usuario=data.get("paradas_usuario")
         )
 
         return jsonify({
@@ -109,7 +110,8 @@ def duelo_mejor_tiempo():
             escuderia_id_1=data.get("escuderia_id_1"),
             escuderia_id_2=data.get("escuderia_id_2"),
             circuito_key=data.get("circuito_key"),
-            compuestos_usuario=data.get("compuestos_usuario")
+            compuestos_usuario=data.get("compuestos_usuario"),
+            paradas_usuario=data.get("paradas_usuario")
         )
 
         return jsonify({

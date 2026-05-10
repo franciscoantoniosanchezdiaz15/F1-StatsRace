@@ -50,6 +50,8 @@ function formatBonus(valor, esCarrera, aciertoCompuesto = null) {
 }
 
 function getBonusColor(valor, esCarrera, aciertoCompuesto = null) {
+  if (aciertoCompuesto == null) return "text-neutral-500";
+
   if (esCarrera) {
     const n = Number(valor || 0);
     if (n > 0) return "text-green-400";
@@ -145,15 +147,44 @@ function EscuderiaDetalleCard({ escuderia, esCarrera, esUsuario }) {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${piloto.acierto_compuesto ? 'bg-green-500' : 'bg-red-500'}`} />
+                    <div className={`w-2 h-2 rounded-full ${piloto.acierto_compuesto == null ? "bg-neutral-500" : piloto.acierto_compuesto ? 'bg-green-500' : 'bg-red-500'}`} />
                     <span className={`text-xs font-black tabular-nums ${getBonusColor(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto)}`}>
-                      {formatBonus(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto)}
+                      {piloto.acierto_compuesto == null ? "NF" : formatBonus(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto)}
                     </span>
                     <span className="text-[9px] text-neutral-600 font-black uppercase">
                       {esCarrera ? "pts" : "s"}
                     </span>
                   </div>
                 </div>
+
+                <div className="flex items-center justify-between bg-black/20 rounded-xl px-3 py-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] text-neutral-500 font-black uppercase tracking-widest">Boxes</span>
+
+                    <span className="text-white text-xs font-black">
+                      {piloto.paradas_elegidas}
+                    </span>
+
+                    <span className="text-neutral-600 text-xs">→</span>
+
+                    <span className="text-white text-xs font-black">
+                      {piloto.paradas_reales}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${piloto.acierto_paradas == null ? "bg-neutral-500" : piloto.acierto_paradas ? "bg-green-500" : "bg-red-500"}`}/>
+
+                    <span className={`text-xs font-black tabular-nums ${getBonusColor(piloto.bonus_paradas, esCarrera, piloto.acierto_paradas)}`}>
+                      {piloto.acierto_paradas == null ? "NF" : formatBonus( piloto.bonus_paradas, esCarrera, piloto.acierto_paradas)}
+                    </span>
+
+                    <span className="text-[9px] text-neutral-600 font-black uppercase">
+                      {esCarrera ? "pts" : "s"}
+                    </span>
+                  </div>
+                </div>
+
               </div>
             )}
           </div>
@@ -178,8 +209,14 @@ function BonificacionesPanel({ bonificaciones, esCarrera }) {
     0
   );
 
+  const totalParadas = bonificaciones.pilotos.reduce(
+    (acc, p) =>
+      acc + getBonusDisplayValue(p.bonus_paradas, esCarrera, p.acierto_paradas),
+    0
+  );
+
   const bonusQuimicaDisplay = getBonusDisplayValue(bonificaciones.bonus_quimica, esCarrera);
-  const totalBonos = bonusQuimicaDisplay + totalCompuestos;
+  const totalBonos = bonusQuimicaDisplay + totalCompuestos + totalParadas;
   const unidad = esCarrera ? "pts" : "s";
 
   return (
@@ -208,22 +245,44 @@ function BonificacionesPanel({ bonificaciones, esCarrera }) {
             className="flex items-center justify-between bg-black/30 px-4 py-3 rounded-2xl border border-neutral-800"
           >
             <div className="flex items-center gap-3">
-              <div className={`w-2 h-2 rounded-full ${piloto.acierto_compuesto ? 'bg-green-500' : 'bg-red-400'}`} />
+              <div className={`w-2 h-2 rounded-full ${piloto.acierto_compuesto == null ? "bg-neutral-500" : piloto.acierto_compuesto ? 'bg-green-500' : 'bg-red-400'}`} />
               <div>
                 <p className="text-white text-xs font-black uppercase tracking-tight">{piloto.full_name}</p>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <CompuestoBadge compuesto={piloto.compuesto_elegido} />
                   <span className="text-neutral-600 text-[10px]">→</span>
                   <CompuestoBadge compuesto={piloto.compuesto_real} />
-                  <span className={`text-[9px] font-black uppercase ml-1 ${piloto.acierto_compuesto ? 'text-green-500' : 'text-red-400'}`}>
-                    {piloto.acierto_compuesto ? "Acierto" : "Fallo"}
+                  <span className={`text-[9px] font-black uppercase ml-1 ${piloto.acierto_compuesto == null ? "bg-neutral-500" : piloto.acierto_compuesto ? 'text-green-500' : 'text-red-400'}`}>
+                    {piloto.acierto_compuesto == null ? "NF" : piloto.acierto_compuesto ? "Acierto" : "Fallo"}
                   </span>
                 </div>
               </div>
             </div>
             <span className={`text-sm font-black tabular-nums ${getBonusColor(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto)}`}>
-              {formatBonus(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto)} {unidad}
+              {piloto.acierto_compuesto == null ? "NF" : formatBonus(piloto.bonus_compuesto, esCarrera, piloto.acierto_compuesto)}{" "} {unidad}
             </span>
+
+            <div className="flex items-center justify-between border-neutral-800 pt-3">
+              <div className="flex items-center gap-3">
+                <div className={`w-2 h-2 rounded-full ${ piloto.acierto_paradas == null ? "bg-neutral-500" : piloto.acierto_paradas ? "bg-green-500" : "bg-red-400"}`}/>
+
+                <div>
+                  <p className="text-white text-xs font-black uppercase tracking-tight">
+                    Paradas en boxes
+                  </p>
+
+                  <p className="text-[9px] text-neutral-500 font-black uppercase mt-0.5">
+                    Elegidas {piloto.paradas_elegidas} → Reales{" "} {piloto.paradas_reales}
+                  </p>
+                </div>
+              </div>
+
+              <span className={`text-sm font-black tabular-nums ${getBonusColor(piloto.bonus_paradas, esCarrera, piloto.acierto_paradas)}`}>
+                {piloto.acierto_paradas == null ? "NF" : formatBonus( piloto.bonus_paradas, esCarrera, piloto.acierto_paradas)}{" "}
+                {unidad}
+              </span>
+            </div>
+
           </div>
         ))}
       </div>

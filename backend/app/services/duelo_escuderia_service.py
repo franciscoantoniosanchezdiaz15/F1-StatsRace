@@ -8,6 +8,7 @@ from app.repositories.duelo_escuderia_repo import crear_duelo_escuderia, obtener
 from app.services.circuito_service import listar_circuitos_client
 from app.services.piloto_service import extraer_sessions_carrera
 from app.services.neumatico_service import resolver_compuesto_piloto
+from app.services.parada_service import resolver_paradas_piloto
 from app.clients.f1_client import OpenF1Client
 
 client = OpenF1Client()
@@ -207,9 +208,12 @@ def obtener_lista_resultados_por_driver(resultados: list[dict]):
     return lista
 
 
-def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_usuario=None):
+def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_usuario=None, paradas_usuario=None):
     if compuestos_usuario is None:
         compuestos_usuario = {}
+
+    if paradas_usuario is None:
+        paradas_usuario = {}
 
     driver_numbers = obtener_driver_numbers_escuderia(escuderia)
     resultados = obtener_resultados_pilotos(session_key, driver_numbers)
@@ -231,11 +235,16 @@ def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_us
                 puntos = 0.0
 
         compuesto_elegido = compuestos_usuario.get(str(piloto.driver_number))
+        paradas_elegidas = paradas_usuario.get(str(piloto.driver_number))
 
         info_compuesto = resolver_compuesto_piloto(
             session_key, piloto.driver_number, compuesto_elegido, "carrera")
 
-        valor_final_piloto = puntos + info_compuesto["bonus_compuesto"]
+        info_paradas = resolver_paradas_piloto(
+            session_key, piloto.driver_number, paradas_elegidas, "carrera", piloto_valido=valido)
+
+        valor_final_piloto = puntos + \
+            info_compuesto["bonus_compuesto"] + info_paradas["bonus_paradas"]
 
         datos_piloto = crear_piloto_resumen_base(piloto)
         datos_piloto["valor"] = valor_final_piloto
@@ -244,6 +253,10 @@ def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_us
         datos_piloto["compuesto_elegido"] = info_compuesto["compuesto_elegido"]
         datos_piloto["compuesto_real"] = info_compuesto["compuesto_real"]
         datos_piloto["acierto_compuesto"] = info_compuesto["acierto_compuesto"]
+        datos_piloto["bonus_paradas"] = info_paradas["bonus_paradas"]
+        datos_piloto["paradas_elegidas"] = info_paradas["paradas_elegidas"]
+        datos_piloto["paradas_reales"] = info_paradas["paradas_reales"]
+        datos_piloto["acierto_paradas"] = info_paradas["acierto_paradas"]
 
         if resultado:
             datos_piloto["position"] = resultado.get("position")
@@ -255,8 +268,10 @@ def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_us
     bonus_quimica = float(calcular_quimica_escuderia(escuderia))
 
     total_sin_bonus = 0
+    bonus_paradas = 0
     for p in pilotos_detalle:
         total_sin_bonus += p["valor"]
+        bonus_paradas += p.get("bonus_paradas")
 
     valor_final = total_sin_bonus + bonus_quimica + 20
 
@@ -267,6 +282,7 @@ def obtener_detalle_carrera_escuderia(session_key: int, escuderia, compuestos_us
         "bonus_quimica": round(bonus_quimica, 3),
         "valor_final": round(valor_final, 3),
         "pilotos": pilotos_detalle,
+        "bonus_paradas": round(bonus_paradas, 3)
     }
 
 
@@ -386,14 +402,14 @@ def obtener_detalle_mejor_tiempo_escuderia(session_key: int, escuderia, compuest
     return resultado_final
 
 
-def calcular_resultado_duelo(escuderia_usuario, escuderia_rival, circuito_key: int, modo: str, compuesto_usuario=None):
+def calcular_resultado_duelo(escuderia_usuario, escuderia_rival, circuito_key: int, modo: str, compuesto_usuario=None, paradas_usuario=None):
     session_key = obtener_session_key_por_circuito(circuito_key)
 
     if modo == "carrera":
         detalle_usuario = obtener_detalle_carrera_escuderia(
-            session_key, escuderia_usuario, compuesto_usuario)
+            session_key, escuderia_usuario, compuesto_usuario, paradas_usuario)
         detalle_rival = obtener_detalle_carrera_escuderia(
-            session_key, escuderia_rival, {})
+            session_key, escuderia_rival, {}, None)
 
         return {
             "valor_usuario": detalle_usuario["valor_final"],
@@ -435,15 +451,20 @@ def crear_resumen_bonificaciones(detalle_escuderia: dict) -> dict:
             "compuesto_real": piloto.get("compuesto_real"),
             "acierto_compuesto": piloto.get("acierto_compuesto"),
             "bonus_compuesto": piloto.get("bonus_compuesto"),
+            "paradas_elegidas": piloto.get("paradas_elegidas"),
+            "paradas_reales": piloto.get("paradas_reales"),
+            "acierto_paradas": piloto.get("acierto_paradas"),
+            "bonus_paradas": piloto.get("bonus_paradas")
         })
 
     return {
         "bonus_quimica": detalle_escuderia.get("bonus_quimica"),
+        "bonus_paradas": detalle_escuderia.get("bonus_paradas"),
         "pilotos": pilotos_bonus,
     }
 
 
-def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_circuito: str, escuderia_id_1: int, escuderia_id_2: int | None = None, circuito_key: int | None = None, compuestos_usuario=None):
+def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_circuito: str, escuderia_id_1: int, escuderia_id_2: int | None = None, circuito_key: int | None = None, compuestos_usuario=None, paradas_usuario=None):
     escuderia_usuario = obtener_escuderia_por_id(escuderia_id_1)
     if not escuderia_usuario:
         raise EscuderiaNoEncontradaException()
@@ -460,7 +481,8 @@ def simular_duelo_escuderias(usuario_id: int, modo: str, modo_rival: str, modo_c
         escuderia_rival,
         circuito["circuit_key"],
         modo,
-        compuestos_usuario
+        compuestos_usuario,
+        paradas_usuario
     )
 
     valor_usuario = resultado_duelo["valor_usuario"]

@@ -7,6 +7,7 @@ from app.repositories.usuario_repo import obtener_usuario_por_id
 from app.services.circuito_service import listar_circuitos_client
 from app.services.piloto_service import extraer_sessions_carrera, listar_pilotos_client
 from app.services.neumatico_service import resolver_compuesto_piloto
+from app.services.parada_service import resolver_paradas_piloto
 from app.clients.f1_client import OpenF1Client
 
 client = OpenF1Client()
@@ -155,7 +156,7 @@ def es_resultado_valido_carrera(resultado: dict):
         return False
 
 
-def obtener_detalle_carrera_piloto(session_key: int, piloto_data: dict, compuesto_usuario=None):
+def obtener_detalle_carrera_piloto(session_key: int, piloto_data: dict, compuesto_usuario=None, paradas_usuario=None):
     driver_number = piloto_data["driver_number"]
     resultado = obtener_resultado_piloto(session_key, driver_number)
 
@@ -176,7 +177,16 @@ def obtener_detalle_carrera_piloto(session_key: int, piloto_data: dict, compuest
         "carrera"
     )
 
-    valor_final = puntos + info_compuesto["bonus_compuesto"]
+    info_paradas = resolver_paradas_piloto(
+        session_key,
+        driver_number,
+        paradas_usuario,
+        "carrera",
+        piloto_valido=valido
+    )
+
+    valor_final = puntos + \
+        info_compuesto["bonus_compuesto"] + info_paradas["bonus_paradas"]
 
     datos_piloto = crear_piloto_resumen_base(piloto_data)
     datos_piloto["valor"] = round(valor_final + 10, 3)
@@ -186,6 +196,10 @@ def obtener_detalle_carrera_piloto(session_key: int, piloto_data: dict, compuest
     datos_piloto["compuesto_real"] = info_compuesto["compuesto_real"]
     datos_piloto["acierto_compuesto"] = info_compuesto["acierto_compuesto"]
     datos_piloto["position"] = resultado.get("position") if resultado else None
+    datos_piloto["bonus_paradas"] = info_paradas["bonus_paradas"]
+    datos_piloto["paradas_elegidas"] = info_paradas["paradas_elegidas"]
+    datos_piloto["paradas_reales"] = info_paradas["paradas_reales"]
+    datos_piloto["acierto_paradas"] = info_paradas["acierto_paradas"]
 
     return datos_piloto
 
@@ -234,9 +248,11 @@ def obtener_mejor_vuelta_piloto(session_key: int, driver_number: int):
     return min(vueltas_validas)
 
 
-def obtener_mejor_vuelta_piloto_con_detalle(session_key: int, piloto_data: dict, compuesto_usuario=None):
+def obtener_mejor_vuelta_piloto_con_detalle(session_key: int, piloto_data: dict, compuesto_usuario=None, paradas_usuario=None):
     driver_number = piloto_data["driver_number"]
     mejor_vuelta = obtener_mejor_vuelta_piloto(session_key, driver_number)
+
+    valido = mejor_vuelta is not None
 
     info_compuesto = resolver_compuesto_piloto(
         session_key,
@@ -245,32 +261,46 @@ def obtener_mejor_vuelta_piloto_con_detalle(session_key: int, piloto_data: dict,
         "mejor-tiempo"
     )
 
+    info_paradas = resolver_paradas_piloto(
+        session_key,
+        driver_number,
+        paradas_usuario,
+        "mejor-tiempo",
+        piloto_valido=valido
+    )
+
     datos_piloto = crear_piloto_resumen_base(piloto_data)
     datos_piloto["bonus_compuesto"] = info_compuesto["bonus_compuesto"]
     datos_piloto["compuesto_elegido"] = info_compuesto["compuesto_elegido"]
     datos_piloto["compuesto_real"] = info_compuesto["compuesto_real"]
     datos_piloto["acierto_compuesto"] = info_compuesto["acierto_compuesto"]
+    datos_piloto["bonus_paradas"] = info_paradas["bonus_paradas"]
+    datos_piloto["paradas_elegidas"] = info_paradas["paradas_elegidas"]
+    datos_piloto["paradas_reales"] = info_paradas["paradas_reales"]
+    datos_piloto["acierto_paradas"] = info_paradas["acierto_paradas"]
 
     if mejor_vuelta is not None:
-        valor_final = mejor_vuelta + info_compuesto["bonus_compuesto"]
+        valor_final = mejor_vuelta + \
+            info_compuesto["bonus_compuesto"] + info_paradas["bonus_paradas"]
         datos_piloto["valor"] = round(valor_final, 3)
         datos_piloto["valido"] = True
     else:
-        valor_final = mejor_vuelta - info_compuesto["bonus_compuesto"]
+        valor_final = mejor_vuelta - \
+            info_compuesto["bonus_compuesto"] - info_paradas["bonus_paradas"]
         datos_piloto["valor"] = None
         datos_piloto["valido"] = False
 
     return datos_piloto
 
 
-def calcular_resultado_duelo(piloto_1, piloto_2, circuito_key: int, modo: str, compuesto_usuario=None):
+def calcular_resultado_duelo(piloto_1, piloto_2, circuito_key: int, modo: str, compuesto_usuario=None, paradas_usuario=None):
     session_key = obtener_session_key_por_circuito(circuito_key)
 
     if modo == "carrera":
         detalle_1 = obtener_detalle_carrera_piloto(
-            session_key, piloto_1, compuesto_usuario)
+            session_key, piloto_1, compuesto_usuario, paradas_usuario)
         detalle_2 = obtener_detalle_carrera_piloto(
-            session_key, piloto_2, {})
+            session_key, piloto_2, {}, None)
 
         return {
             "valor_1": detalle_1["valor"],
@@ -281,9 +311,9 @@ def calcular_resultado_duelo(piloto_1, piloto_2, circuito_key: int, modo: str, c
 
     if modo == "mejor-tiempo":
         detalle_1 = obtener_mejor_vuelta_piloto_con_detalle(
-            session_key, piloto_1, compuesto_usuario)
+            session_key, piloto_1, compuesto_usuario, paradas_usuario)
         detalle_2 = obtener_mejor_vuelta_piloto_con_detalle(
-            session_key, piloto_2, {})
+            session_key, piloto_2, {}, None)
 
         valor_1 = detalle_1["valor"]
         valor_2 = detalle_2["valor"]
@@ -301,7 +331,7 @@ def calcular_resultado_duelo(piloto_1, piloto_2, circuito_key: int, modo: str, c
     raise DueloInvalidoException()
 
 
-def simular_duelo(usuario_id: int, modo: str, modo_rival: str, modo_circuito: str, driver_number_1: int, driver_number_2: int | None = None, circuito_key: int | None = None, compuesto_usuario=None):
+def simular_duelo(usuario_id: int, modo: str, modo_rival: str, modo_circuito: str, driver_number_1: int, driver_number_2: int | None = None, circuito_key: int | None = None, compuesto_usuario=None, paradas_usuario=None):
     usuario = obtener_usuario_por_id(usuario_id)
     if not usuario:
         raise UsuarioNotFoundException()
@@ -318,7 +348,8 @@ def simular_duelo(usuario_id: int, modo: str, modo_rival: str, modo_circuito: st
         piloto_2,
         circuito["circuit_key"],
         modo,
-        compuesto_usuario
+        compuesto_usuario,
+        paradas_usuario
     )
 
     valor_1 = resultado_duelo["valor_1"]

@@ -39,7 +39,8 @@ def duelo_carrera():
             driver_number_1=data.get("driver_number_1"),
             driver_number_2=data.get("driver_number_2"),
             circuito_key=data.get("circuito_key"),
-            compuesto_usuario=data.get("compuesto_usuario")
+            compuesto_usuario=data.get("compuesto_usuario"),
+            paradas_usuario=data.get("paradas_usuario")
         )
 
         return jsonify({
@@ -99,7 +100,8 @@ def duelo_mejor_tiempo():
             driver_number_1=data.get("driver_number_1"),
             driver_number_2=data.get("driver_number_2"),
             circuito_key=data.get("circuito_key"),
-            compuesto_usuario=data.get("compuesto_usuario")
+            compuesto_usuario=data.get("compuesto_usuario"),
+            paradas_usuario=data.get("paradas_usuario")
         )
 
         return jsonify({

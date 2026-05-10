@@ -12,18 +12,31 @@ export default function DueloEscuderiasNeumaticosForm({
   onSubmit,
 }) {
   const [compuestosUsuario, setCompuestosUsuario] = useState({});
+  const [paradasUsuario, setParadasUsuario] = useState({});
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const pilotos = useMemo(() => escuderiaUsuario?.pilotos || [], [escuderiaUsuario]);
 
-  function handleChange(driverNumber, compuesto) {
+  function handleCompuestoChange(driverNumber, compuesto) {
     setCompuestosUsuario((prev) => {
       // Creamos una copia del estado anterior
       const nuevoEstado = { ...prev };
       
       // Asignamos el nuevo valor usando la clave dinámica
       nuevoEstado[driverNumber] = compuesto;
+      
+      return nuevoEstado;
+    });
+  }
+
+  function handleParadasChange(driverNumber, valor) {
+    setParadasUsuario((prev) => {
+      // Creamos una copia del estado anterior
+      const nuevoEstado = { ...prev };
+      
+      // Asignamos el nuevo valor usando la clave dinámica
+      nuevoEstado[driverNumber] = valor;
       
       return nuevoEstado;
     });
@@ -40,11 +53,22 @@ export default function DueloEscuderiasNeumaticosForm({
         if (!compuestosUsuario[piloto.driver_number]) {
           throw new Error(`Debes elegir neumático para ${piloto.full_name}`);
         }
+
+        if (paradasUsuario[piloto.driver_number] == undefined || paradasUsuario[piloto.driver_number] == "") {
+          throw new Error(`Debes predecir las paradas de ${piloto.full_name}`);
+        }
+      }
+
+      const paradasNormalizadas = {};
+
+      for (const piloto of pilotos) {
+        paradasNormalizadas[piloto.driver_number] = Number(paradasUsuario[piloto.driver_number]);
       }
 
       const payloadFinal = {
         ...configDuelo,
         compuestos_usuario: compuestosUsuario,
+        paradas_usuario: paradasNormalizadas,
       };
 
       await onSubmit(payloadFinal);
@@ -131,7 +155,7 @@ export default function DueloEscuderiasNeumaticosForm({
                       <button
                         key={c.id}
                         type="button"
-                        onClick={() => handleChange(piloto.driver_number, c.id)}
+                        onClick={() => handleCompuestoChange(piloto.driver_number, c.id)}
                         className={`
                           relative flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all duration-300
                           ${isSelected 
@@ -160,6 +184,17 @@ export default function DueloEscuderiasNeumaticosForm({
                   })}
                 </div>
               </div>
+
+              <div className="border-t border-neutral-800 pt-6">
+                <label className="block text-[10px] text-neutral-500 font-black uppercase tracking-[0.2em] mb-3 text-center">
+                  Predice paradas en boxes
+                </label>
+
+                <input type="number" min="0" max="6" value={paradasUsuario[piloto.driver_number] ?? ""} onChange={(e) => handleParadasChange(piloto.driver_number, e.target.value)} placeholder="De 0 a 6"
+                  className="w-50 m-3 bg-black border border-neutral-700 rounded-2xl py-4 text-center text-2xl font-black text-white focus:outline-none focus:border-[#FFEB00]"
+                />
+              </div>
+        
             </div>
           ))}
         </div>

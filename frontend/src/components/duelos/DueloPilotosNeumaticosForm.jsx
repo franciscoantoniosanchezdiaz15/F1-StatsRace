@@ -14,6 +14,7 @@ export default function DueloPilotosNeumaticosForm({
   const [compuestoUsuario, setCompuestoUsuario] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [paradasUsuario, setParadasUsuario] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -26,9 +27,14 @@ export default function DueloPilotosNeumaticosForm({
         throw new Error(`Debes elegir neumático para ${pilotoUsuario.full_name}`);
       }
 
+      if (paradasUsuario === "") {
+        throw new Error(`Debes predecir las paradas en boxes de ${pilotoUsuario.full_name}`);
+      }
+
       const payloadFinal = {
         ...configDuelo,
         compuesto_usuario: compuestoUsuario,
+        paradas_usuario: Number(paradasUsuario)
       };
 
       await onSubmit(payloadFinal);
@@ -157,6 +163,18 @@ export default function DueloPilotosNeumaticosForm({
                   );
                 })}
               </div>
+
+              <div className="mt-8 border-t border-neutral-800 pt-6">
+                <label className="block text-[10px] text-neutral-500 font-black uppercase tracking-[0.2em] mb-3 text-center">
+                  Predice paradas en boxes
+                </label>
+
+                <input type="number" min="0" max="6" value={paradasUsuario} onChange={(e) => setParadasUsuario(e.target.value)} placeholder="De 0 a 6"
+                  className="w-full bg-black border border-neutral-700 rounded-2xl px-5 py-4 text-center text-2xl font-black text-white focus:outline-none focus:border-[#FFEB00]"
+                />
+
+              </div>
+
             </div>
           </div>
         </div>

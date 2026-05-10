@@ -156,7 +156,7 @@ export default function EscuderiasPage() {
                       onClick={() => handleEliminar(escuderia.id)}
                       className="px-6 py-3 border border-red-900/30 text-red-500/50 font-black uppercase text-[10px] tracking-widest rounded-xl hover:bg-red-600 hover:text-white transition-all"
                     >
-                      Depedir pilotos
+                      Despedir pilotos
                     </button>
                   </div>
                 </div>

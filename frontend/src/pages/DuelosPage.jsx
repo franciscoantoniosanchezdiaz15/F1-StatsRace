@@ -11,17 +11,18 @@ const instrucciones = {
     pasos: [
       "Elige el tipo de enfrentamiento: Carrera Completa o Mejor Tiempo.",
       "Selecciona tu piloto, un circuito y un piloto rival para poder competir.",
-      "Configura la estrategia para tu piloto, seleccionando el neumático con el que competira.",
+      "Configura la estrategia para tu piloto, seleccionando el neumático con el que competira y el número de paradas en boxes. ( Ten en cuenta que tu elección influirá directamente en el resultado de tu piloto ya sea ganando bonus o perdiendolos )",
       "Lanza la simulación y que gane el mejor coach junto a su piloto.",
     ],
   },
   escuderias: {
     titulo: "Batalla de Escuderías",
     pasos: [
-      "Crea o selecciona dos escuderías personalizadas.",
-      "Asigna pilotos y configura el coche de cada escudería.",
+      "Crea tu escudería personalizada. Fichando dos pilotos para que formen parte de tu escudería.",
       "Elige el tipo de enfrentamiento: Carrera Completa o Mejor Tiempo.",
-      "Lanza la simulación y compara el rendimiento de ambas escuderías.",
+      "Selecciona tu escudería, un circuito y una escudería rival para poder competir.",
+      "Configura la estrategia para tus pilotos, seleccionando los neumáticos con los que competirán y el número de paradas en boxes que harán. ( Ten en cuenta que tu elección influirá directamente en el resultado de tus pilotos ya sea ganando bonus o perdiendolos )",
+      "Lanza la simulación y que gane la mejor escudería.",
     ],
   },
 };
