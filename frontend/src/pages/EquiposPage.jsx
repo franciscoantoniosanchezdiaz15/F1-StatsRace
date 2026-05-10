@@ -72,56 +72,68 @@ export default function CircuitosPage() {
         {!loading && !error && equipos.length > 0 && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {equipos.map((equipo) => (
-                <article
-                  key={equipo.team_name}
-                  onClick={() => navigate(`/equipos/${equipo.team_name}`, { state: { page } })}
-                  className="group relative bg-neutral-900 rounded-2xl border border-neutral-800 overflow-hidden transition-all duration-500 hover:border-white/20 hover:shadow-[0_0_30px_rgba(0,0,0,0.5)] cursor-pointer"
-                >
+              {equipos.map((equipo) => {
 
-                  <div className="p-8 flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500">Escuderia</span>
-                        <div className="h-px w-8 bg-neutral-700"></div>
-                        <span className="text-[#FFEB00] font-mono text-xs font-bold">P{equipo.position_current}</span>
+                const imagenEquipo = getEquipo(equipo.team_name);
+
+                return(
+                  <article
+                    key={equipo.team_name}
+                    onClick={() => navigate(`/equipos/${equipo.team_name}`, { state: { page } })}
+                    className="group relative bg-neutral-900 rounded-2xl border border-neutral-800 overflow-hidden transition-all duration-500 hover:border-white/20 hover:shadow-[0_0_30px_rgba(0,0,0,0.5)] cursor-pointer"
+                  >
+
+                    <div className="p-8 flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500">Escuderia</span>
+                          <div className="h-px w-8 bg-neutral-700"></div>
+                          <span className="text-[#FFEB00] font-mono text-xs font-bold">P{equipo.position_current}</span>
+                        </div>
+
+                        <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white group-hover:text-[#FFEB00] transition-colors duration-300">
+                          {equipo.team_name}
+                        </h2>
+
+                        <div className="mt-6 flex gap-8">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">Puntos</span>
+                            <span className="text-2xl font-black italic text-white leading-none mt-1">
+                              {equipo.points_current}
+                            </span>
+                          </div>
+                          
+                          <div className="flex flex-col border-l border-neutral-800 pl-8">
+                            <span className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">Ranking</span>
+                            <span className="text-2xl font-black italic text-white leading-none mt-1">
+                              #{equipo.position_current}
+                            </span>
+                          </div>
+                        </div>
                       </div>
 
-                      <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white group-hover:text-[#FFEB00] transition-colors duration-300">
-                        {equipo.team_name}
-                      </h2>
-
-                      <div className="mt-6 flex gap-8">
-                        <div className="flex flex-col">
-                          <span className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">Puntos</span>
-                          <span className="text-2xl font-black italic text-white leading-none mt-1">
-                            {equipo.points_current}
+                      <div className="relative h-40 w-40 flex items-center justify-center border-2 border-white/5 rounded-full bg-black group-hover:border-[#FFEB00]/30 transition-all">
+                        {imagenEquipo ? (
+                          <img
+                            src={imagenEquipo}
+                            alt={equipo.team_name}
+                            className="max-w-[90%] max-h-[90%]  object-contain p-4 drop-shadow-[0_0_15px_rgba(0,163,255,0.4)] transform transition-transform duration-700 group-hover:scale-110 overflor-hiden"
+                          />
+                        ) : (
+                          <span className="text-[#FFEB00] text-2xl font-black italic text-center px-4">
+                            {equipo.team_name}
                           </span>
-                        </div>
+                        )}
                         
-                        <div className="flex flex-col border-l border-neutral-800 pl-8">
-                          <span className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">Ranking</span>
-                          <span className="text-2xl font-black italic text-white leading-none mt-1">
-                            #{equipo.position_current}
-                          </span>
-                        </div>
                       </div>
                     </div>
 
-                    <div className="relative h-40 w-40 flex items-center justify-center border-2 border-white/5 rounded-full bg-black group-hover:border-[#FFEB00]/30 transition-all">
-                      <img
-                        src={getEquipo(equipo.team_name)}
-                        alt={equipo.team_name}
-                        className="max-w-[90%] max-h-[90%]  object-contain p-4 drop-shadow-[0_0_15px_rgba(0,163,255,0.4)] transform transition-transform duration-700 group-hover:scale-110 overflor-hiden"
-                      />
+                    <div className="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-[8px] font-mono text-neutral-600 uppercase tracking-widest">Mostrar Mas →</span>
                     </div>
-                  </div>
-
-                  <div className="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[8px] font-mono text-neutral-600 uppercase tracking-widest">Mostrar Mas →</span>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                );
+              })}
             </div>
 
             {paginacion && (
