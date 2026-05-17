@@ -1,17 +1,22 @@
 # F1-StatsRace
-F1 StatsRace es una aplicación web full-stack. Hecha con Flask, React+JS y TailwindCSS. Basada en datos reales de Fórmula 1 (OpenF1 API) de la temporada 2023 que permite a los usuarios crear escuderías personalizadas y simular duelos estratégicos entre ellas.
 
-El proyecto combina análisis de datos reales con mecánicas de juego, incluyendo selección de pilotos, gestión de presupuesto y simulación de rendimiento en carrera.
+F1 StatsRace es una aplicación full-stack basada en datos reales de Fórmula 1 mediante OpenF1. Permite consultar pilotos, circuitos y equipos, crear escuderías personalizadas y simular duelos estratégicos entre pilotos o escuderías.
+
+El proyecto combina datos reales con mecánicas tipo manager: selección de neumáticos, predicción de paradas en boxes, bonificaciones, penalizaciones, historial de duelos y recomendaciones mediante IA.
 
 ## Funcionalidades
 
-- 🔐 Registro y autenticación de usuarios
-- 🏎️ Consulta de pilotos, equipos y circuitos (OpenF1 API)
-- 🏁 Creación de escuderías personalizadas
+- 🔐 Registro y autenticación de usuarios.
+- 🏎️ Consulta de pilotos, equipos y circuitos (OpenF1 API de la temporada 2023).
+- 🏁 Creación de escuderías personalizadas con un presupuesto máximo.
 - 💰 Sistema de presupuesto para seleccionar pilotos en escuderías personalizadas
-- ⚔️ Simulación de duelos entre escuderías personalizadas y pilotos
-- 🧠 Bonus estratégicos para escuderías personalizadas (neumáticos y química) y para pilotos (neumáticos)
+- ⚔️ Simulación de duelos entre escuderías personalizadas y pilotos con dos modos de juego (carrera completa o mejor tiempo).
+- 🧠 Bonus estratégicos y penalizaciones mediante la selección de compuestos, predicción de paradas en boxes y para las escuderías de química de equipo.
 - 📊 Historial de duelos
+- 🤖 Recomendación de rival mediante IA.
+- ☁️ Backend desplegado en Render.
+- 🌐 Frontend desplegado en Netlify/Vercel.
+- 🗄️ Base de datos MySQL en Aiven.
 
 ## Arquitectura
 
@@ -78,30 +83,39 @@ FRONTEND_URL=http://localhost:5173
 
 SESSION_COOKIE_SECURE=False
 SESSION_COOKIE_SAMESITE=Lax
+
+GROQ_API_KEY=tu_api_key
+GROQ_MODEL=llama-3.3-70b-versatile
 ```
 
-### 4. Ejecutar servidor
+### 4. Inicializar base de datos
+```bash
+.\.venv\Scripts\flask.exe --app app.main:app db upgrade  
+.\.venv\Scripts\flask.exe --app app.main:app seed  
+```
+
+### 5. Ejecutar servidor
 ```bash
 .\.venv\Scripts\python.exe -m app.main
 ```
 
-### 5. Servidor disponible
+### 6. Servidor disponible
 ```bash
 http://localhost:5000
 ```
 
-### 6. Ir al directorio Frontend
+### 7. Ir al directorio Frontend
 ```bash
 cd frontend
 npm install
 ```
 
-### 7. Crear archivo .env
+### 8. Crear archivo .env
 ```bash
 VITE_API_URL=http://localhost:5000
 ```
 
-### 8. Ejecutar fronted
+### 9. Ejecutar fronted
 ```bash
 npm run dev
 ```
