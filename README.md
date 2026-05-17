@@ -118,4 +118,18 @@ npm run dev
 
 ## Autor
 
-Francisco Antonio  
+Francisco Antonio Sánchez Díaz
+
+## Demostración
+
+![alt text](capturas-demostracion/demostracion1.png)
+
+![alt text](capturas-demostracion/demostracion2.png)
+
+![alt text](capturas-demostracion/demostracion3.png)
+
+![alt text](capturas-demostracion/demostracion4.png)
+
+![alt text](capturas-demostracion/demostracion5.png)
+
+![alt text](capturas-demostracion/demostracion6.png)
