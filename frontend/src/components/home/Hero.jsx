@@ -23,7 +23,9 @@ function Hero() {
           </p>
 
           <div className="mt-10 flex flex-wrap gap-6">
-            <button className="relative px-8 py-4 bg-[#A6051A] text-white font-black uppercase tracking-widest text-sm rounded-tl-2xl rounded-br-2xl transition-all duration-300 hover:bg-white hover:text-black hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] cursor-pointer">
+            <button 
+              onClick={() => navigate("/register")}
+              className="relative px-8 py-4 bg-[#A6051A] text-white font-black uppercase tracking-widest text-sm rounded-tl-2xl rounded-br-2xl transition-all duration-300 hover:bg-white hover:text-black hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] cursor-pointer">
               Comenzar ahora
             </button>
 
